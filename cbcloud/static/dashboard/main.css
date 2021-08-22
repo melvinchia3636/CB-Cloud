@@ -1,0 +1,2 @@
+*{font-family:"Quicksand"}.bg-indigo-400{background-color:#5E78FF}.bg-indigo-300{background-color:#CCD4FF}.text-indigo-400{color:#5E78FF}.slash{font-family:"Nunito"}.nav li{position:relative;cursor:pointer;-webkit-transition:.2s;transition:.2s}.nav li:before{content:"";height:0;width:.2rem;background-color:#5E78FF;position:absolute;top:0;left:0;-webkit-transition:.2s;transition:.2s}.nav li:hover{color:#5E78FF}.nav li:is(.active,:hover):before{height:100%}
+/*# sourceMappingURL=main.css.map */

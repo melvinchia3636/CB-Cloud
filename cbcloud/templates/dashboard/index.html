@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,23 +7,45 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
 	<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&family=Nunito:wght@800&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="{% static 'dashboard/main.css' %}">
 	<title>Codeblog Cloud</title>
-	<style>
-		* {
-			font-family: "Quicksand"
-		}
-
-		.bg-indigo-400 {
-			background-color: #5E78FF
-		}
-		
-		.slash {
-			font-family: "Nunito"
-		}
-	</style>
 </head>
-<body class="bg-gray-100 flex text-gray-700">
-	<div class="h-screen bg-white w-72 shadow-lg"></div>
+<body class="bg-gray-100 flex text-gray-800">
+	<div class="h-screen bg-white w-72 shadow-lg flex flex-col justify-between">
+		<img src="{% static 'base/logo.svg' %}" class="p-8 w-10/12">
+		<ul class="text-gray-500 gap-6 flex flex-col nav">
+			<li class="w-full px-8 py-4 flex items-center gap-4 font-bold text-xl text-indigo-400 active">
+				<span class="iconify w-8 h-8" data-icon="uil:create-dashboard"></span>
+				Dashboard
+			</li>
+			<li class="w-full px-8 py-4 flex items-center gap-4 font-bold text-xl">
+				<span class="iconify w-8 h-8" data-icon="uil:archive-alt"></span>
+				File Storage
+			</li>
+			<li class="w-full px-8 py-4 flex items-center gap-4 font-bold text-xl">
+				<span class="iconify w-8 h-8" data-icon="uil:database"></span>
+				Databases
+			</li>
+			<li class="w-full px-8 py-4 flex items-center gap-4 font-bold text-xl">
+				<span class="iconify w-8 h-8" data-icon="uil:map-marker"></span>
+				Map
+			</li>
+			<li class="w-full px-8 py-4 flex items-center gap-4 font-bold text-xl">
+				<span class="iconify w-8 h-8" data-icon="uil:phone-alt"></span>
+				Contacts
+			</li>
+			<li class="w-full px-8 py-4 flex items-center gap-4 font-bold text-xl">
+				<span class="iconify w-8 h-8" data-icon="uil:trash-alt"></span>
+				Recycle Bin
+			</li>
+		</ul>
+		<div class="p-8">
+			<p class="font-bold">{{used}}GB of {{total}}GB used</p>
+			<div class="bg-indigo-300 h-2 w-full rounded-full mt-2 overflow-hidden" id="slider">
+				<div class="h-full bg-indigo-400 rounded-full w-0 transition-all duration-500 delay-100"></div>
+			</div>
+		</div>
+	</div>
 	<div class="py-12 px-16">
 		<div class="flex w-full justify-between">
 			<h2 class="text-4xl font-normal">Hello <span class="font-bold">Melvin Chia</span>,</h2>
@@ -86,5 +109,11 @@
 		<p>{{temp}}</p>-->
 	</div>
 	<script src="https://code.iconify.design/2/2.0.3/iconify.min.js"></script>
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+	<script>
+		$(document).ready(() => {
+			$("#slider").children().width($('#slider').width()*{{used}}/{{total}})
+		})
+	</script>
 </body>
 </html>
