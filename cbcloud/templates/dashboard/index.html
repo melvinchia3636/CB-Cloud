@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&family=Nunito:wght@800&display=swap" rel="stylesheet">
+	<title>Codeblog Cloud</title>
+	<style>
+		* {
+			font-family: "Quicksand"
+		}
+
+		.bg-indigo-400 {
+			background-color: #5E78FF
+		}
+		
+		.slash {
+			font-family: "Nunito"
+		}
+	</style>
+</head>
+<body class="bg-gray-100 flex text-gray-700">
+	<div class="h-screen bg-white w-72 shadow-lg"></div>
+	<div class="py-12 px-16">
+		<div class="flex w-full justify-between">
+			<h2 class="text-4xl font-normal">Hello <span class="font-bold">Melvin Chia</span>,</h2>
+			<div class="flex gap-10">
+				<button><span class="iconify w-6 h-6 text-gray-900" data-icon="uil:search"></span></button>
+				<button><span class="iconify w-6 h-6 text-gray-900" data-icon="uil:sliders-v"></span></button>
+				<div class="w-12 h-12 rounded-full overflow-hidden shadow-md"><img src="https://i.pravatar.cc/300"></div>
+			</div>
+		</div>
+		<div class="font-semibold mt-2 flex gap-2 text-lg items-center">
+			Cloud
+			<svg width="10" height="10" viewBox="0 0 9 9" fill="none" xmlns="http://www.w3.org/2000/svg">
+				<path d="M3.375 7.5L6.375 4.5L3.375 1.5" stroke="#5E78FF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+			</svg>
+			<span class='font-bold text-xl'>Dashboard</span>
+		</div>
+		<div class="mt-12">
+			<h3 class="text-2xl font-bold">Quick Access</h3>
+			<div class="mt-6 flex gap-3">
+				{% for item in quick %}
+				<div class="flex flex-col justify-between w-56 h-44 p-4 pb-3 rounded-2xl shadow-md" style="background: {{item.bg}}">
+					<span class="iconify w-10 h-10" data-icon="{{item.icon.name}}" style="color: {{item.icon.color}}"></span>
+					<div>
+						<p class="font-bold text-xl">{{item.name}}</p>
+						<p class="font-semibold">{{item.last}}</p>
+					</div>
+				</div>
+				{% endfor %}
+			</div>
+		</div>
+		<div class="mt-12">
+			<h3 class="text-2xl font-bold">Storage Details</h3>
+			<div class="mt-6 flex gap-4">
+				<div class="bg-white rounded-xl p-4 w-full shadow-md flex gap-4 items-center">
+					<span class="iconify w-14 h-14 bg-indigo-400 p-2 text-white rounded-lg" style="box-shadow: 2px 2px 4px rgba(0, 0, 0, .25) inset" data-icon="uil:hdd"></span>
+					<div>
+						<p class="font-bold text-gray-500">Storage Used</p>
+						<p class="font-bold text-2xl">{{used}}GB <span class="slash">/</span> <span class="text-gray-500">{{total}}GB</span></p>
+					</div>
+				</div>
+				<div class="bg-white rounded-xl p-4 w-full shadow-md flex gap-4 items-center">
+					<span class="iconify w-14 h-14 bg-indigo-400 p-2 text-white rounded-lg" style="box-shadow: 2px 2px 4px rgba(0, 0, 0, .25) inset" data-icon="uil:temperature-three-quarter"></span>
+					<div>
+						<p class="font-bold text-gray-500">CPU Temperature</p>
+						<p class="font-bold text-2xl">36°C <span class="slash">/</span> <span class="text-gray-500">42°C</span></p>
+					</div>
+				</div>
+				<div class="bg-white rounded-xl p-4 w-full shadow-md flex gap-4 items-center">
+					<span class="iconify w-14 h-14 bg-indigo-400 p-2 text-white rounded-lg" style="box-shadow: 2px 2px 4px rgba(0, 0, 0, .25) inset" data-icon="uil:database"></span>
+					<div>
+						<p class="font-bold text-gray-500">Database Queries</p>
+						<p class="font-bold text-2xl">12,000 <span class="slash">/</span> <span class="text-gray-500">5,000,000</span></p>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!--{% for file in files %}
+		<p>{{file}}</p>
+		{% endfor %}
+		<p>{{used}} / {{total}}</p>
+		<p>{{temp}}</p>-->
+	</div>
+	<script src="https://code.iconify.design/2/2.0.3/iconify.min.js"></script>
+</body>
+</html>
