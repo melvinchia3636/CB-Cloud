@@ -1,0 +1,28 @@
+{% extends 'base/base.html' %}
+
+{% block content %}
+<div class="flex items-center mt-12 text-indigo-400 font-bold text-4xl">
+	<span class="iconify w-12 h-12 mr-4" data-icon="uil:archive-alt"></span>
+	File Storage
+</div>
+<table class="w-full mt-10" align="left">
+	<tr class="text-left text-gray-500 border-b-2 border-gray-200">
+		<th class="w-4/12 py-3">Name</th>
+		<th class="w-2/12">Last Modified</th>
+		<th class="w-2/12">Date Created</th>
+		<th class="w-1/12">Size</th>
+		<th class="w-2/12">Tags</th>
+	</tr>
+	{% for file in files %}
+	<tr class="border-b-2 border-gray-200 font-medium text-lg">
+		<td class="py-3 font-semibold text-xl flex items-center pl-2 pr-4 whitespace-nowrap">
+			<span class="iconify w-8 h-8 mr-4 text-indigo-400" data-icon="bx:bxs-{{file.type}}"></span>
+			<span class="overflow-ellipsis overflow-hidden" style="max-width: 20rem">{{file.name}}</span>
+		</td>
+		<td>{{file.last_mod}}</td>
+		<td>{{file.created}}</td>
+		<td>{% ifequal file.type "file" %}{{file.size}} bytes{% else %}-{% endifequal %}</td>
+	</tr>
+	{% endfor %}
+</table>
+{% endblock %}

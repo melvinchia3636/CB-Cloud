@@ -1,0 +1,76 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&family=Nunito:wght@800&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="{% static 'dashboard/main.css' %}">
+	<title>Codeblog Cloud</title>
+</head>
+<body class="bg-gray-100 flex text-gray-800">
+	<div class="h-screen bg-white w-72 shadow-lg flex flex-col justify-between sticky top-0 left-0">
+		<img src="{% static 'base/logo.svg' %}" class="p-8 w-10/12">
+		<ul class="text-gray-500 gap-6 flex flex-col nav">
+			<a href="{% url 'dashboard' %}" class="w-full px-8 py-4 flex items-center gap-4 font-bold text-xl {% ifequal curtab 0 %}text-indigo-400 active{% endifequal %}">
+				<span class="iconify w-8 h-8" data-icon="uil:create-dashboard"></span>
+				Dashboard
+			</a>
+			<a href="{% url 'storage' %}" class="w-full px-8 py-4 flex items-center gap-4 font-bold text-xl {% ifequal curtab 1 %}text-indigo-400 active{% endifequal %}">
+				<span class="iconify w-8 h-8" data-icon="uil:archive-alt"></span>
+				File Storage
+			</a>
+			<a class="w-full px-8 py-4 flex items-center gap-4 font-bold text-xl {% ifequal curtab 2 %}text-indigo-400 active{% endifequal %}">
+				<span class="iconify w-8 h-8" data-icon="uil:database"></span>
+				Databases
+			</a>
+			<a class="w-full px-8 py-4 flex items-center gap-4 font-bold text-xl {% ifequal curtab 3 %}text-indigo-400 active{% endifequal %}">
+				<span class="iconify w-8 h-8" data-icon="uil:map-marker"></span>
+				Map
+			</a>
+			<a class="w-full px-8 py-4 flex items-center gap-4 font-bold text-xl {% ifequal curtab 4 %}text-indigo-400 active{% endifequal %}">
+				<span class="iconify w-8 h-8" data-icon="uil:phone-alt"></span>
+				Contacts
+			</a>
+			<a class="w-full px-8 py-4 flex items-center gap-4 font-bold text-xl {% ifequal curtab 5 %}text-indigo-400 active{% endifequal %}">
+				<span class="iconify w-8 h-8" data-icon="uil:trash-alt"></span>
+				Recycle Bin
+			</a>
+		</ul>
+		<div class="p-8">
+			<p class="font-bold">{{used}}GB of {{total}}GB used</p>
+			<div class="bg-indigo-300 h-2 w-full rounded-full mt-2 overflow-hidden" id="slider">
+				<div class="h-full bg-indigo-400 rounded-full w-0 transition-all duration-500 delay-100"></div>
+			</div>
+		</div>
+	</div>
+	<div class="py-12 px-16 w-full" style="flex-shrink: 9999;">
+		<div class="flex w-full justify-between">
+			<h2 class="text-4xl font-normal">Hello <span class="font-bold">Melvin Chia</span>,</h2>
+			<div class="flex gap-10">
+				<button><span class="iconify w-6 h-6 text-gray-900" data-icon="uil:search"></span></button>
+				<button><span class="iconify w-6 h-6 text-gray-900" data-icon="uil:sliders-v"></span></button>
+				<div class="w-12 h-12 rounded-full overflow-hidden shadow-md"><img src="https://i.pravatar.cc/300"></div>
+			</div>
+		</div>
+		<div class="font-semibold mt-2 flex gap-2 text-lg items-center">
+			Cloud
+			<svg width="10" height="10" viewBox="0 0 9 9" fill="none" xmlns="http://www.w3.org/2000/svg">
+				<path d="M3.375 7.5L6.375 4.5L3.375 1.5" stroke="#5E78FF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+			</svg>
+			<span class='font-bold text-xl'>File Storage</span>
+		</div>
+		{% block content %}{% endblock %}
+	</div>
+	<script src="https://code.iconify.design/2/2.0.3/iconify.min.js"></script>
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+	<script>
+		$(document).ready(() => {
+			$("#slider").children().width($('#slider').width()*{{used}}/{{total}})
+		})
+		{% block script %}{% endblock %}
+	</script>
+</body>
+</html>

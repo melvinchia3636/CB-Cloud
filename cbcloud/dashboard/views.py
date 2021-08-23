@@ -1,12 +1,10 @@
 from django.shortcuts import render
-import os
 import psutil
 
 def HomeView(request):
 	hdd = psutil.disk_usage('G:/')
-	files = filter(lambda i: not i.startswith('.'), os.listdir('G:/'))
 	return render(request, 'dashboard/index.html', {
-		'files': files, 
+		'curtab': 0,
 		'used': round(hdd.used/1073741824), 
 		'total': round(hdd.total/1073741824),
 		'quick': [
