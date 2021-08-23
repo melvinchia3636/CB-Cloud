@@ -1,4 +1,5 @@
 {% extends 'base/base.html' %}
+{% load operations %}
 
 {% block content %}
 <div class="flex items-center mt-12 text-indigo-400 font-bold text-4xl">
@@ -14,15 +15,24 @@
 		<th class="w-2/12">Tags</th>
 	</tr>
 	{% for file in files %}
-	<tr class="border-b-2 border-gray-200 font-medium text-lg">
+	<tr class="border-b-2 border-gray-200 font-medium text-lg file-row relative" {% ifequal file.type "folder" %}onclick="goto('{{file.name}}')"{% endifequal %}>
 		<td class="py-3 font-semibold text-xl flex items-center pl-2 pr-4 whitespace-nowrap">
 			<span class="iconify w-8 h-8 mr-4 text-indigo-400" data-icon="bx:bxs-{{file.type}}"></span>
 			<span class="overflow-ellipsis overflow-hidden" style="max-width: 20rem">{{file.name}}</span>
 		</td>
 		<td>{{file.last_mod}}</td>
 		<td>{{file.created}}</td>
-		<td>{% ifequal file.type "file" %}{{file.size}} bytes{% else %}-{% endifequal %}</td>
+		<td>{% ifequal file.type "file" %}{%fetchshort file.size %}{% else %}-{% endifequal %}</td>
+		<td></td>
 	</tr>
 	{% endfor %}
 </table>
+{% endblock %}
+
+{% block script %}
+const goto = path => window.location += (!(window.location.href[window.location.href.length-1] === "/") ? "/" : "") + path
+window.onload = () => {
+	//breadcrumb code here
+	console.log('hmm')
+}
 {% endblock %}
