@@ -1,6 +1,6 @@
 html {
     overflow: hidden;
-    height: 100%;
+    height: 100vh;
 }
 
 body {
@@ -18,6 +18,10 @@ body {
 
 .bg-indigo-300 {
 	background-color: #CCD4FF
+}
+
+.bg-indigo-200 {
+	background-color: #e6e7f8
 }
 
 .text-indigo-400 {
@@ -57,7 +61,7 @@ body {
 .file-row {
 	cursor: pointer;
 	
-	&:hover {
+	&:not(.bg-indigo-200):hover {
 		background: #e9e9e9
 	}
 }
@@ -85,10 +89,16 @@ body {
 	}
 }
 
-.divider {
+.divider-h {
 	height: 1px;
 	width: calc(100% - 2rem);
 	margin: 0 1rem
+}
+
+.divider-v {
+	height: 2rem;
+	width: 2.4px;
+	border-radius: 10px;
 }
 
 .bg-trans {
@@ -101,7 +111,7 @@ body {
 
 #folder-create {
 	& > div {
-		transform: translateY(300%);
+		transform: translateY(250%);
 		transition: .3s ease-in;
 	}
 

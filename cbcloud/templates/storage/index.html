@@ -10,41 +10,52 @@
 		File Storage
 	</div>
 	<div class="flex gap-8">
-		<button><span class="iconify w-8 h-8 text-gray-700" data-icon="tabler:layout-grid"></span></button>
-		<button><span class="iconify w-8 h-8 text-gray-700" data-icon="uil:info-circle"></span></button>
+		<div class="gap-8 hidden" id="func-tools">
+			<button><span class="iconify w-7 h-7 text-gray-700" data-icon="uil:link-h"></span></button>
+			<button><span class="iconify w-7 h-7 text-gray-700" data-icon="uil:unlock-alt"></span></button>
+			<button><span class="iconify w-7 h-7 text-gray-700" data-icon="uil:trash-alt"></span></button>
+			<button><span class="iconify w-7 h-7 text-gray-700" data-icon="uil:ellipsis-v"></span></button>
+		</div>
+		<div class="divider-v bg-gray-300 hidden"></div>
+		<div class="flex gap-8">
+			<button><span class="iconify w-7 h-7 text-gray-700" data-icon="tabler:layout-grid"></span></button>
+			<button><span class="iconify w-7 h-7 text-gray-700" data-icon="uil:info-circle"></span></button>
+		</div>
 	</div>
 </div>
-<table class="w-full mt-6" align="left">
-	<tr class="text-left text-gray-500 border-b-2 border-gray-200">
-		<th class="w-4/12 py-3">Name</th>
-		<th class="w-2/12">Last Modified</th>
-		<th class="w-2/12">Date Created</th>
-		<th class="w-1/12">Size</th>
-		<th class="w-2/12">Tags</th>
-	</tr>
-	{% for file in files %}
-	<tr class="border-b-2 border-gray-200 font-medium text-lg file-row relative" {% ifequal file.type "folder" %}onclick="goto('{{file.name}}')"{% endifequal %}>
-		<td class="py-3 font-semibold text-xl flex items-center pl-2 pr-4 whitespace-nowrap">
-			<span class="iconify w-8 h-8 mr-4 text-indigo-400" data-icon="bx:bxs-{{file.type}}"></span>
-			<span class="overflow-ellipsis overflow-hidden" style="max-width: 20rem">{{file.name}}</span>
-		</td>
-		<td>{{file.last_mod}}</td>
-		<td>{{file.created}}</td>
-		<td>{% ifequal file.type "file" %}{%fetchshort file.size %}{% else %}-{% endifequal %}</td>
-		<td></td>
-	</tr>
-	{% endfor %}
-</table>
+<div class="text-left text-gray-500 border-b-2 border-gray-200 flex w-full">
+	<p class="w-5/12 py-3">Name</p>
+	<p class="w-2/12">Last Modified</p>
+	<p class="w-2/12">Date Created</p>
+	<p class="w-1/12">Size</p>
+	<p class="w-2/12">Tags</p>
+</div>
+<div class="h-full overflow-y-hidden mt-0.5">
+	<table class="w-full" align="left">
+		{% for file in files %}
+		<tr class="w-5/12 border-b-2 bg-gray-100 transition-all border-gray-200 font-medium text-lg file-row relative" {% ifequal file.type "folder" %}onclick="goto('{{file.name}}', {{ forloop.counter }})"{% endifequal %}>
+			<td class="py-3 font-semibold text-xl flex items-center pl-2 pr-4 whitespace-nowrap">
+				<span class="iconify w-8 h-8 mr-4 text-indigo-400" data-icon="bx:bxs-{{file.type}}"></span>
+				<span class="overflow-ellipsis overflow-hidden" style="max-width: 20rem">{{file.name}}</span>
+			</td>
+			<td class="w-2/12">{{file.last_mod}}</td>
+			<td class="w-2/12">{{file.created}}</td>
+			<td class="w-1/12">{% ifequal file.type "file" %}{%fetchshort file.size %}{% else %}-{% endifequal %}</td>
+			<td class="w-2/12"></td>
+		</tr>
+		{% endfor %}
+	</table>
+</div>
 <div class="fixed right-6 bottom-6 add">
 	<button class="transition-all rounded-full w-16 h-16 shadow-md flex items-center justify-center bg-indigo-400">
 		<span class="iconify w-7 h-7 text-white" data-icon="uil:plus" style="stroke: white; stroke-width: .6px"></span>
 	</button>
 	<div class="w-96 h-0 absolute bottom-0 right-0 text-gray-500 bg-white rounded-xl shadow-md overflow-hidden">
-		<button class="w-full px-8 py-3 pt-3 flex items-center mb-3 gap-4 font-bold text-xl" onclick="newFolderPromptToggle()">
+		<button class="w-full px-8 py-3 pt-3 flex items-center mb-3 gap-4 font-bold text-xl" onclick="newFolderPromptShow()">
 			<span class="iconify w-8 h-8" data-icon="uil:folder-plus"></span>
 			Create folder
 		</button>
-		<div class="bg-gray-300 divider"></div>
+		<div class="bg-gray-200 divider-h"></div>
 		<button class="w-full px-8 py-3 mt-3 flex items-center gap-4 font-bold text-xl">
 			<span class="iconify w-8 h-8" data-icon="uil:file-upload"></span>
 			Upload file
@@ -61,21 +72,33 @@
 			<span class="iconify w-8 h-8 mr-3" data-icon="uil:folder-plus"></span>
 			New Folder
 		</div>
-		<input type="text" class="text-gray-700 border-2 rounded-md border-gray-400 px-4 py-3 w-96 my-6 text-xl font-medium" placeholder="Untitled Folder"/>
-		<div class="flex gap-2 justify-end w-full">
-			<button class="font-semibold text-lg text-gray-500 px-5 py-2 rounded-md" onclick="newFolderPromptToggle()">
-				Cancel
-			</button>
-			<button class="bg-indigo-400 font-semibold text-lg text-white px-6 py-2 rounded-md">
-				Create
-			</button>
-		</div>
+		<form>
+			<input type="text" class="text-gray-700 border-2 rounded-md border-gray-400 px-4 py-3 w-96 my-6 text-xl font-medium" placeholder="Untitled Folder"/>
+			<div class="flex gap-2 justify-end w-full">
+				<button class="font-semibold text-lg text-gray-500 px-5 py-2 rounded-md" onclick="newFolderPromptHide()">
+					Cancel
+				</button>
+				<input type="submit" class="bg-indigo-400 font-semibold text-lg text-white px-6 py-2 rounded-md" onclick="createFolder()" value="Create">
+			</div>
+		</form>
 	</div>
 </div>
 {% endblock %}
-
 {% block script %}
-const goto = path => window.location += (!(window.location.href[window.location.href.length-1] === "/") ? "/" : "") + path
+let selectedItem = null;
+
+const goto = (path, id) => {
+	if (selectedItem-1 == id) {
+		window.location += (!(window.location.href[window.location.href.length-1] === "/") ? "/" : "") + path
+	} else {
+		if (selectedItem) $(`table tr:nth-child(${selectedItem})`).removeClass('bg-indigo-200')
+		selectedItem = id+1
+		$(`table tr:nth-child(${selectedItem})`).addClass('bg-indigo-200')
+		$("#func-tools, #func-tools + div").removeClass('hidden').addClass('flex')
+	}
+}
+
+$("td").mousedown(function(){ return false; })
 
 const arrow = `<svg class="mt-0.5" width="10" height="10" viewBox="0 0 9 9" fill="none" xmlns="http://www.w3.org/2000/svg">
 	<path d="M3.375 7.5L6.375 4.5L3.375 1.5" stroke="#5E78FF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
@@ -84,10 +107,39 @@ paths = window.location.pathname.split('/').filter(e => e).map(e => decodeURI(e)
 $('#breadcrumb').append(paths.slice(0, paths.length-1).join(arrow))
 $('#breadcrumb').append(`${paths.length > 1 ? arrow : ""}<span class='font-bold'>${paths[paths.length-1]}</span>`)
 
-const newFolderPromptToggle = () => {
-		$("#folder-create").toggleClass("invisible").toggleClass('black-op-bg')
-		$(".add > div").toggleClass('show');
+const newFolderPromptShow = () => {
+	$("#folder-create").removeClass("invisible").addClass('black-op-bg')
+	$(".add > div").removeClass('show');
+	setTimeout(function() { $('#folder-create input:first-child()').focus() }, 500);
 }
+
+const newFolderPromptHide = () => {
+	$("#folder-create").addClass("invisible").removeClass('black-op-bg')
+}
+
+$("#folder-create form").submit(e => {
+	e.preventDefault()
+
+	const folderName = $("#folder-create input").val() || "Untitled Folder";
+	const cookie = document.cookie
+	const csrfToken = cookie.substring(cookie.indexOf('=') + 1)
+	$.ajax({
+		url: "./api",
+		method: "POST",
+		headers: {
+			'X-CSRFToken': csrfToken
+		},
+		data: {
+			action: "create-folder",
+			path: paths,
+			name: folderName
+		},
+		success: () => {
+			newFolderPromptHide()
+			setTimeout(() => {location.reload();}, 500)
+		}
+	})
+})
 
 $(".add > button").click(() => {
 	$(".add > div").addClass('show')
@@ -98,4 +150,4 @@ $('body').on('click', function (e) {
 		$(".add > div").removeClass('show');
 	}
 });
-{% endblock %}
+{% endblock %} 
