@@ -1,3 +1,4 @@
+from django.contrib.staticfiles.storage import staticfiles_storage
 from django.http.response import HttpResponse
 from django.shortcuts import render
 from django.http import Http404
@@ -5,12 +6,15 @@ from django.conf import settings
 import psutil
 import os
 import time
+import json
 
 def requestFiles(path):
 	path = os.path.join(settings.STORAGE_DIR, path)
+	filetypes = json.load(open(staticfiles_storage.path("storage/filetype.json")))
 	if not os.path.exists(path): raise Http404
 	return sorted([{
-		"type": "folder" if os.path.isdir(os.path.join(path, i)) else "file",
+		"type": (type:="folder" if os.path.isdir(os.path.join(path, i)) else "file"),
+		"icon": filetypes[i.split('.')[-1].lower()] if type == "file" and i.split('.')[-1].lower() in filetypes else "",
 		"name": i,
 		"last_mod": time.strftime("%d %b %Y", time.localtime(os.path.getmtime(os.path.join(path, i)))),
 		"created":  time.strftime("%d %b %Y", time.localtime(os.stat(os.path.join(path, i)).st_ctime)),

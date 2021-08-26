@@ -12,6 +12,10 @@ body {
 	font-family: "Quicksand";
 }
 
+.scrollbar-track {
+	z-index: 0 !important
+}
+
 .bg-indigo-400 {
 	background-color: #5E78FF
 }
