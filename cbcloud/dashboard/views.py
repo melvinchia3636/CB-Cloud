@@ -1,8 +1,9 @@
 from django.shortcuts import render
+from django.conf import settings
 import psutil
 
 def HomeView(request):
-	hdd = psutil.disk_usage('G:/')
+	hdd = psutil.disk_usage(settings.STORAGE_DIR)
 	return render(request, 'dashboard/index.html', {
 		'curtab': 0,
 		'used': round(hdd.used/1073741824), 

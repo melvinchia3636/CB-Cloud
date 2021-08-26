@@ -14,6 +14,7 @@
 	"exe": "eos-icons:application-window-outlined",
 	"zip": "bi:file-earmark-zip-fill",
 	"rar": "bi:file-earmark-zip-fill",
+	"gz": "bi:file-earmark-zip-fill",
 	"py": "fa-brands:python",
 	"pyc": "fa-brands:python",
 	"pyz": "fa-brands:python",
@@ -40,5 +41,7 @@
 	"svg": "ci:file-svg",
 	"less": "bx:bxl-less",
 	"scss": "bx:bxl-sass",
-	"css": "ci:file-css"
+	"css": "ci:file-css",
+	"html": "ci:file-html",
+	"htm": "ci:file-html"
 }
