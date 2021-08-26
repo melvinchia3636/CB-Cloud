@@ -28,7 +28,7 @@ def requestFiles(path):
 
 def HomeView(request):
 	hdd = psutil.disk_usage(settings.STORAGE_DIR)
-	files = requestFiles("/")
+	files = requestFiles(settings.STORAGE_DIR)
 	return render(request, 'storage/index.html', {
 		'curtab': 1,
 		'files': files,
