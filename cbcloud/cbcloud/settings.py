@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'api.apps.ApiConfig',
     'dashboard.apps.DashboardConfig',
     'storage.apps.StorageConfig'
 ]
@@ -134,4 +135,4 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-STORAGE_DIR = "C:"
+STORAGE_DIR = "G:"

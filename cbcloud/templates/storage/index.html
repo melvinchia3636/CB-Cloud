@@ -86,6 +86,7 @@
 {% endblock %}
 {% block script %}
 let selectedItem = null;
+const HTMLParser = new DOMParser()
 
 Scrollbar.init(document.querySelector('.tab'));
 
@@ -130,14 +131,14 @@ $("#folder-create form").submit(e => {
 	const cookie = document.cookie
 	const csrfToken = cookie.substring(cookie.indexOf('=') + 1)
 	$.ajax({
-		url: "./api",
+		url: "{% url 'api-create-folder' %}",
 		method: "POST",
 		headers: {
 			'X-CSRFToken': csrfToken
 		},
 		data: {
 			action: "create-folder",
-			path: paths,
+			path: paths.map(e => HTMLParser.parseFromString(e, "text/xml").children[0].innerHTML),
 			name: folderName
 		},
 		success: () => {

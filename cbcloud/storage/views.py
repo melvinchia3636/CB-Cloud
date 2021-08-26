@@ -1,5 +1,4 @@
 from django.contrib.staticfiles.storage import staticfiles_storage
-from django.http.response import HttpResponse
 from django.shortcuts import render
 from django.http import Http404
 from django.conf import settings
@@ -45,17 +44,3 @@ def FileView(request, path):
 		'used': round(hdd.used/1073741824), 
 		'total': round(hdd.total/1073741824),
 	})
-
-def APIView(request): 
-	data = request.POST
-	name = data.get('name')
-	path = os.path.join(settings.STORAGE_DIR, *data.getlist('path[]')[1:])
-	if not os.path.exists(path):
-		#error message here
-		...
-
-	folder_path = os.path.join(path, name)
-	try: os.mkdir(folder_path)
-	except: raise #also error code
-
-	return HttpResponse("okay")

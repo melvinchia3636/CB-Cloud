@@ -9,5 +9,6 @@ urlpatterns = [
     path('', include('dashboard.urls')),
     path('dashboard/', include('dashboard.urls')),
     path('storage/', include('storage.urls')),
+    path('api/', include('api.urls')),
     url(r'^static/(?P<path>.*)$', serve, {'document_root': settings.STATIC_ROOT}),
 ]
