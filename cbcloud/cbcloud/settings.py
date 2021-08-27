@@ -135,4 +135,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-STORAGE_DIR = "G:"
+STORAGE_DIR = "C:/Users/Kelvi/Documents"
+
+MEDIA_ROOT = STORAGE_DIR
+MEDIA_URL = '/files/'

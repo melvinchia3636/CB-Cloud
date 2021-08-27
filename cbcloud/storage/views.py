@@ -8,19 +8,20 @@ import time
 import json
 
 def requestFiles(path):
-	path = os.path.join(settings.STORAGE_DIR, path)
+	abs_path = os.path.join(settings.STORAGE_DIR, path)
 	filetypes = json.load(open(staticfiles_storage.path("storage/filetype.json")))
-	if not os.path.exists(path): raise Http404
+	if not os.path.exists(abs_path): raise Http404
 	files = []
-	for i in filter(lambda i: not i.startswith('.'), sorted(os.listdir(path))):
-		type = "folder" if os.path.isdir(os.path.join(path, i)) else "file"
+	for i in filter(lambda i: not i.startswith('.'), sorted(os.listdir(abs_path), key=lambda i: i.lower())):
+		type = "folder" if os.path.isdir(os.path.join(abs_path, i)) else "file"
 		files.append({
 		"type": type,
+		"path": os.path.join(path, i).replace('\\', '/'),
 		"icon": filetypes[i.split('.')[-1].lower()] if type == "file" and i.split('.')[-1].lower() in filetypes else "",
 		"name": i,
-		"last_mod": time.strftime("%d %b %Y", time.localtime(os.path.getmtime(os.path.join(path, i)))),
-		"created":  time.strftime("%d %b %Y", time.localtime(os.stat(os.path.join(path, i)).st_ctime)),
-		"size": os.path.getsize(os.path.join(path, i))
+		"last_mod": time.strftime("%d %b %Y", time.localtime(os.path.getmtime(os.path.join(abs_path, i)))),
+		"created":  time.strftime("%d %b %Y", time.localtime(os.stat(os.path.join(abs_path, i)).st_ctime)),
+		"size": os.path.getsize(os.path.join(abs_path, i))
 	})
 
 	return sorted(files, key=lambda i: ['folder', 'file'].index(i["type"]))

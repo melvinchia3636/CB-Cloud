@@ -30,21 +30,25 @@
 	<p class="w-1/12">Size</p>
 	<p class="w-2/12">Tags</p>
 </div>
-<div class="h-full overflow-y-hidden mt-0.5 tab">
-	<table class="w-full" align="left">
+<div class="h-full overflow-y-hidden mt-0.5 tab relative">
+	<div class="w-full table">
 		{% for file in files %}
-		<tr class="w-5/12 border-b-2 bg-gray-100 transition-all border-gray-200 font-medium text-lg file-row relative" {% ifequal file.type "folder" %}onclick="goto('{{file.name}}', {{ forloop.counter }})"{% endifequal %}>
-			<td class="py-3 font-semibold text-xl flex items-center pl-2 pr-4 whitespace-nowrap">
-				<span class="iconify w-8 h-8 mr-4 text-indigo-400" data-icon="{% ifequal file.type 'folder' %}bx:bxs-folder{% else %}{% if file.icon %}{{file.icon}}{% else %}bi:file-earmark-fill{% endif %}{% endifequal %}"></span>
-				<span class="overflow-ellipsis overflow-hidden" style="max-width: 20rem">{{file.name}}</span>
-			</td>
-			<td class="w-2/12">{{file.last_mod}}</td>
-			<td class="w-2/12">{{file.created}}</td>
-			<td class="w-1/12">{% ifequal file.type "file" %}{%fetchshort file.size %}{% else %}-{% endifequal %}</td>
-			<td class="w-2/12"></td>
-		</tr>
+		<div class="border-b-2 bg-gray-100 transition-colors border-gray-200 font-medium text-lg file-row dropzone draggable-dropzone--occupied">
+			<div class="flex items-center transition-colors item" onclick="goto('{% ifequal file.type "folder" %}{{file.name}}{% else %}{{file.path}}{% endifequal %}', {{ forloop.counter }}, '{{ file.type }}')">
+				<div class="flex items-center w-full">
+					<p class="w-5/12 py-3 font-semibold text-xl flex items-center pl-2 pr-4 whitespace-nowrap">
+						<span class="iconify w-8 h-8 mr-4 text-indigo-400" data-icon="{% ifequal file.type 'folder' %}bx:bxs-folder{% else %}{% if file.icon %}{{file.icon}}{% else %}bi:file-earmark-fill{% endif %}{% endifequal %}"></span>
+						<span class="overflow-ellipsis overflow-hidden" style="max-width: 20rem">{{file.name}}</span>
+					</p>
+					<p class="w-2/12">{{file.last_mod}}</p>
+					<p class="w-2/12">{{file.created}}</p>
+					<p class="w-1/12">{% ifequal file.type "file" %}{%fetchshort file.size %}{% else %}-{% endifequal %}</p>
+					<p class="w-2/12"></p>
+				</div>
+			</div>
+		</div>
 		{% endfor %}
-	</table>
+	</div>
 </div>
 <div class="fixed right-6 bottom-6 add">
 	<button class="transition-all rounded-full w-16 h-16 shadow-md flex items-center justify-center bg-indigo-400" style="z-index: 9999">
@@ -83,20 +87,24 @@
 		</form>
 	</div>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/@shopify/draggable@1.0.0-beta.12/lib/droppable.js"></script>
 {% endblock %}
 {% block script %}
 let selectedItem = null;
 const HTMLParser = new DOMParser()
+const ps = new PerfectScrollbar('.tab');
 
-Scrollbar.init(document.querySelector('.tab'));
-
-const goto = (path, id) => {
+const goto = (path, id, type) => {
 	if (selectedItem == id) {
-		window.location += (!(window.location.href[window.location.href.length-1] === "/") ? "/" : "") + path
+		if (type === "folder") {
+			window.location += (!(window.location.href[window.location.href.length-1] === "/") ? "/" : "") + path
+		} else {
+			window.open(encodeURI(`${window.location.origin}/files/${path}`), "_blank")
+		}
 	} else {
-		if (selectedItem) $(`table tr:nth-child(${selectedItem})`).removeClass('bg-indigo-200')
+		if (selectedItem) $(`.table div:nth-child(${selectedItem}) > div > div`).removeClass('bg-indigo-200')
 		selectedItem = id
-		$(`table tr:nth-child(${selectedItem})`).addClass('bg-indigo-200')
+		$(`.table div:nth-child(${selectedItem}) > div > div`).addClass('bg-indigo-200')
 		$("#func-tools, #func-tools + div").removeClass('hidden').addClass('flex')
 	}
 }
@@ -157,4 +165,16 @@ $('body').on('click', function (e) {
 		$(".add > div").removeClass('show');
 	}
 });
+
+const droppable = new Droppable.default(document.querySelectorAll('.table'), {
+	draggable: `.item`,
+	dropzone: '.dropzone',
+	mirror: {
+		constrainDimensions: true,
+	  },
+	delay: 150,
+});
+
+droppable.on('droppable:stop', e => console.log(e));
+
 {% endblock %} 
