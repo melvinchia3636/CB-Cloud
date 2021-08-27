@@ -136,8 +136,7 @@ $("#folder-create form").submit(e => {
 	e.preventDefault()
 
 	const folderName = $("#folder-create input").val() || "Untitled Folder";
-	const cookie = document.cookie
-	const csrfToken = cookie.substring(cookie.indexOf('=') + 1)
+	const csrfToken = HTMLParser.parseFromString(`{% csrf_token %}`, "text/html").querySelector("input").value
 	$.ajax({
 		url: "{% url 'api-create-folder' %}",
 		method: "POST",

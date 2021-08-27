@@ -1,4 +1,5 @@
 from django.contrib.staticfiles.storage import staticfiles_storage
+from django.views.decorators.csrf import ensure_csrf_cookie
 from django.shortcuts import render
 from django.http import Http404
 from django.conf import settings
@@ -26,6 +27,7 @@ def requestFiles(path):
 
 	return sorted(files, key=lambda i: ['folder', 'file'].index(i["type"]))
 
+@ensure_csrf_cookie
 def HomeView(request):
 	hdd = psutil.disk_usage(settings.STORAGE_DIR)
 	files = requestFiles(settings.STORAGE_DIR)
@@ -36,6 +38,7 @@ def HomeView(request):
 		'total': round(hdd.total/1073741824),
 	})
 
+@ensure_csrf_cookie
 def FileView(request, path):
 	hdd = psutil.disk_usage(settings.STORAGE_DIR)
 	files = requestFiles(path)
