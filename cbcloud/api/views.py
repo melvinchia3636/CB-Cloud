@@ -2,6 +2,8 @@ import os
 import shutil
 from django.conf import settings
 from django.http import HttpResponse
+from django.core.files.storage import FileSystemStorage
+from send2trash import send2trash
 
 def CreateFolder(request):
 	data = request.POST
@@ -29,3 +31,23 @@ def MoveFile(request):
 	shutil.move(source_path, target_path)
 	
 	return HttpResponse("okay")
+
+def UploadFiles(request):
+	files = request.FILES.getlist('files[]')
+	data = request.POST
+	path = os.path.join(settings.STORAGE_DIR, *data.getlist('path[]')[1:])
+	fs = FileSystemStorage(path)
+
+	if not os.path.exists(path):
+		#error message here
+		...
+	for file in files:
+		fs.save(file.name, file)
+	
+	return HttpResponse("okay")
+
+def RemoveFiles(request):
+	data = request.POST
+	path = os.path.join(settings.STORAGE_DIR, *data.getlist('path[]')[1:], data.get('name')).replace('\\', '/').replace('\n', '')
+	shutil.move(path, os.path.join(settings.STORAGE_DIR, ".bin"))
+	return HttpResponse('okay')

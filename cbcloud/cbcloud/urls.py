@@ -9,6 +9,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('dashboard.urls')),
     path('dashboard/', include('dashboard.urls')),
+    path('storage/bin', include('bin.urls')),
     path('storage/', include('storage.urls')),
     path('api/', include('api.urls')),
     url(r'^static/(?P<path>.*)$', serve, {'document_root': settings.STATIC_ROOT}),

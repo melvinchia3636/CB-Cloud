@@ -40,7 +40,8 @@ INSTALLED_APPS = [
 
     'api.apps.ApiConfig',
     'dashboard.apps.DashboardConfig',
-    'storage.apps.StorageConfig'
+    'storage.apps.StorageConfig',
+    'bin.apps.BinConfig'
 ]
 
 MIDDLEWARE = [
@@ -135,7 +136,10 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-STORAGE_DIR = "/media/pi/SILLY CODER"
+STORAGE_DIR = "C:/"
 
 MEDIA_ROOT = STORAGE_DIR
 MEDIA_URL = '/files/'
+
+if not os.path.exists(os.path.join(MEDIA_ROOT, '.bin')):
+    os.mkdir(os.path.join(MEDIA_ROOT, ".bin"))

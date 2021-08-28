@@ -17,6 +17,10 @@ body {
 	}
 }
 
+a, input[type="submit"] {
+	cursor: pointer
+}
+
 .scrollbar-track {
 	z-index: 0 !important
 }
@@ -91,7 +95,7 @@ body {
 		}
 
 		&.show {
-			height: 218px;
+			height: 150px;
 			padding-top: .8rem;
 			padding-bottom: .8rem
 		}
