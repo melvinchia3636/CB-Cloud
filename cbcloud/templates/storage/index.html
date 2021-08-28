@@ -34,7 +34,7 @@
 	<div class="w-full table">
 		{% for file in files %}
 		<div class="border-b-2 bg-gray-100 transition-colors border-gray-200 font-medium text-lg file-row dropzone draggable-dropzone--occupied">
-			<div class="flex items-center transition-colors item" onclick="goto('{% ifequal file.type "folder" %}{{file.name}}{% else %}{{file.path}}{% endifequal %}', {{ forloop.counter }}, '{{ file.type }}')">
+			<div class="flex items-center transition-colors item" onclick="goto('{% ifequal file.type "folder" %}{{file.name}}{% else %}{{file.path}}{% endifequal %}', {{ forloop.counter }}, '{{ file.type }}')" data-type="{{file.type}}">
 				<div class="flex items-center w-full">
 					<p class="w-5/12 py-3 font-semibold text-xl flex items-center pl-2 pr-4 whitespace-nowrap">
 						<span class="iconify w-8 h-8 mr-4 text-indigo-400" data-icon="{% ifequal file.type 'folder' %}bx:bxs-folder{% else %}{% if file.icon %}{{file.icon}}{% else %}bi:file-earmark-fill{% endif %}{% endifequal %}"></span>
@@ -87,12 +87,14 @@
 		</form>
 	</div>
 </div>
-<script src="https://cdn.jsdelivr.net/npm/@shopify/draggable@1.0.0-beta.12/lib/droppable.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@shopify/draggable@1.0.0-beta.12/lib/draggable.bundle.js"></script>
 {% endblock %}
 {% block script %}
 let selectedItem = null;
 const HTMLParser = new DOMParser()
 const ps = new PerfectScrollbar('.tab');
+const csrfToken = HTMLParser.parseFromString(`{% csrf_token %}`, "text/html").querySelector("input").value
+let dragTo;
 
 const goto = (path, id, type) => {
 	if (selectedItem == id) {
@@ -136,7 +138,6 @@ $("#folder-create form").submit(e => {
 	e.preventDefault()
 
 	const folderName = $("#folder-create input").val() || "Untitled Folder";
-	const csrfToken = HTMLParser.parseFromString(`{% csrf_token %}`, "text/html").querySelector("input").value
 	$.ajax({
 		url: "{% url 'api-create-folder' %}",
 		method: "POST",
@@ -144,7 +145,6 @@ $("#folder-create form").submit(e => {
 			'X-CSRFToken': csrfToken
 		},
 		data: {
-			action: "create-folder",
 			path: paths.map(e => HTMLParser.parseFromString(e, "text/xml").children[0].innerHTML),
 			name: folderName
 		},
@@ -165,7 +165,7 @@ $('body').on('click', function (e) {
 	}
 });
 
-const droppable = new Droppable.default(document.querySelectorAll('.table'), {
+const droppable = new Draggable.Droppable(document.querySelectorAll('.table'), {
 	draggable: `.item`,
 	dropzone: '.dropzone',
 	mirror: {
@@ -174,6 +174,31 @@ const droppable = new Droppable.default(document.querySelectorAll('.table'), {
 	delay: 150,
 });
 
-droppable.on('droppable:stop', e => console.log(e));
+droppable.on('drag:over', e => {
+	dragTo = e.over
+});
+
+droppable.on('droppable:stop', e => {
+	const source = e.dropzone.children[0].querySelector('span').innerText;
+	const target = dragTo.querySelector('span').innerText
+	if (dragTo.dataset.type === "folder" && !(source === target)) {
+		$.ajax({
+			url: "{% url 'api-move-file' %}",
+			method: "POST",
+			headers: {
+				'X-CSRFToken': csrfToken
+			},
+			data: {
+				source,
+				target,
+				path: paths.map(e => HTMLParser.parseFromString(e, "text/xml").children[0].innerHTML)
+			},
+			success: () => {
+				location.reload()
+			}
+		})
+	}
+	
+});
 
 {% endblock %} 

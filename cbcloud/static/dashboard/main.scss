@@ -11,6 +11,10 @@ body {
 * {
 	font-family: "Quicksand";
 	user-select: none;
+
+	&:focus {
+		outline: none
+	}
 }
 
 .scrollbar-track {
