@@ -1,41 +1,43 @@
 const ps = new PerfectScrollbar('.tab');
 let selectedItem = null;
 let dragTo;
-
-const goto = (path, id, type) => {
-	if (selectedItem == id) {
-		if (type === "folder") {
-			window.location += (!(window.location.href[window.location.href.length-1] === "/") ? "/" : "") + path
-		} else {
-			window.open(encodeURI(`${window.location.origin}/files/${path}`).replace('#', "%23"), "_blank")
-		}
-	} else {
-		if (selectedItem) $(`.table div:nth-child(${selectedItem}) > div > div`).removeClass('bg-indigo-200')
-		selectedItem = id
-		$(`.table div:nth-child(${selectedItem}) > div > div`).addClass('bg-indigo-200')
-		$("#func-tools, #func-tools + div").removeClass('hidden').addClass('flex')
-	}
-}
-
+let isDownloading;
 
 const arrow = `<svg class="mt-0.5" width="10" height="10" viewBox="0 0 9 9" fill="none" xmlns="http://www.w3.org/2000/svg">
 	<path d="M3.375 7.5L6.375 4.5L3.375 1.5" stroke="#5E78FF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-</svg>`
-paths = window.location.pathname.split('/').filter(e => e)
+</svg>`;
+paths = window.location.pathname.split('/').filter(e => e);
 paths = paths.map((e, i) => {
-	return `<a href="/${paths.slice(0, i+1).join('/')}">${decodeURI(e)}</a>`
+	return `<a href="/${paths.slice(0, i+1).join('/')}">${decodeURI(e)}</a>`;
 })
-$('#breadcrumb').append(paths.slice(0, paths.length-1).join(arrow))
-$('#breadcrumb').append(`${paths.length > 1 ? arrow : ""}<span class='font-bold'>${paths[paths.length-1]}</span>`)
+const getPath = () => paths.map(e => HTMLParser.parseFromString(e, "text/xml").children[0].innerHTML);
+$('#breadcrumb').append(paths.slice(0, paths.length-1).join(arrow));
+$('#breadcrumb').append(`${paths.length > 1 ? arrow : ""}<span class='font-bold'>${paths[paths.length-1]}</span>`);
+
+const goto = (item, id) => {
+	const {path, type} = item.dataset;
+	if (selectedItem == id) {
+		if (type === "folder") {
+			window.location += (!(window.location.href[window.location.href.length-1] === "/") ? "/" : "") + path;
+		} else {
+			window.open(encodeURI(`${window.location.origin}/files/${path}`).replace('#', "%23"), "_blank");
+		}
+	} else {
+		if (selectedItem) $(`.table div:nth-child(${selectedItem}) > div > div`).removeClass('bg-indigo-200');
+		selectedItem = id;
+		$(`.table div:nth-child(${selectedItem}) > div > div`).addClass('bg-indigo-200');
+		$("#func-tools, #func-tools + div").removeClass('hidden').addClass('flex');
+	}
+}
 
 const newFolderPromptShow = () => {
-	$("#folder-create").removeClass("invisible").addClass('black-op-bg')
+	$("#folder-create").removeClass("invisible").addClass('black-op-bg');
 	$(".add > div").removeClass('show');
 	setTimeout(function() { $('#folder-create input:first-child()').focus() }, 500);
 }
 
 const newFolderPromptHide = () => {
-	$("#folder-create").addClass("invisible").removeClass('black-op-bg')
+	$("#folder-create").addClass("invisible").removeClass('black-op-bg');
 }
 
 $("#folder-create form").submit(e => {
@@ -49,18 +51,18 @@ $("#folder-create form").submit(e => {
 			'X-CSRFToken': csrfToken
 		},
 		data: {
-			path: paths.map(e => HTMLParser.parseFromString(e, "text/xml").children[0].innerHTML),
+			path: getPath(),
 			name: folderName
 		},
 		success: () => {
 			newFolderPromptHide()
 			setTimeout(() => {location.reload();}, 500)
 		}
-	})
+	});
 })
 
 $(".add > button").click(() => {
-	$(".add > div").addClass('show')
+	$(".add > div").addClass('show');
 })
 
 $('body').on('click', function (e) {
@@ -79,12 +81,12 @@ const droppable = new Draggable.Droppable(document.querySelectorAll('.table'), {
 });
 
 droppable.on('drag:over', e => {
-	dragTo = e.over
+	dragTo = e.over;
 });
 
 droppable.on('droppable:stop', e => {
 	const source = e.dropzone.children[0].querySelector('span').innerText;
-	const target = dragTo.querySelector('span').innerText
+	const target = dragTo.querySelector('span').innerText;
 	if (dragTo.dataset.type === "folder" && !(source === target)) {
 		$.ajax({
 			url: "/api/move-file",
@@ -95,28 +97,28 @@ droppable.on('droppable:stop', e => {
 			data: {
 				source,
 				target,
-				path: paths.map(e => HTMLParser.parseFromString(e, "text/xml").children[0].innerHTML)
+				path: getPath()
 			},
 			success: () => {
 				location.reload()
 			}
-		})
+		});
 	}
 });
 
 const uploadFile = () => {
 	$(".add > div").removeClass('show');
-	$('#upload').trigger('click')
+	$('#upload').trigger('click');
 }
 
 $('#upload').on("change", function () {
 	const formdata = new FormData();
 	for (file of this.files) {
-		formdata.append("files[]", file)
+		formdata.append("files[]", file);
 	}
-	paths.map(e => HTMLParser.parseFromString(e, "text/xml").children[0].innerHTML).forEach(e => {
-		formdata.append('path[]', e)
-	})
+	getPath().forEach(e => {
+		formdata.append('path[]', e);
+	});
 
 	$.ajax({
 		url: "/api/upload-files",
@@ -131,7 +133,7 @@ $('#upload').on("change", function () {
 		success: () => {
 			location.reload()
 		}
-	})
+	});
 })
 
 const removeFile = () => {
@@ -142,11 +144,104 @@ const removeFile = () => {
 			"X-CSRFToken": csrfToken
 		},
 		data: {
-			path: paths.map(e => HTMLParser.parseFromString(e, "text/xml").children[0].innerHTML),
+			path: getPath(),
 			name: $(`.table > div:nth-child(${selectedItem}) span`).text()
 		},
 		success: () => {
-			location.reload()
+			location.reload();
 		}
-	})
+	});
+}
+
+const download = async (url, filename) => {
+	const slider = $('#download-file .slider')
+	const filenameContianer = $('#download-file p:first-child')
+	const indicator = $('#download-file .indicator')
+
+	const sliderWidth = slider.width();
+	
+	slider.empty()
+	slider.append('<div class="h-full bg-indigo-400 rounded-full w-0 transition-all duration-500"></div>');
+	const sliderInner = slider.children()[0]
+	$("#download-file").removeClass("invisible").addClass('black-op-bg');
+
+	filenameContianer.text('Preparing file')
+	fetch(url)
+		.then(response => {
+			const contentEncoding = response.headers.get('content-encoding');
+			const contentLength = response.headers.get(contentEncoding ? 'x-file-size' : 'content-length');
+			contentType = response.headers.get('content-type');
+			if (contentLength === null) {
+				throw Error('Response size header unavailable');
+			}
+
+			const total = parseInt(contentLength, 10);
+			let loaded = 0;
+			isDownloading = true
+
+			return new Response(
+				new ReadableStream({
+					start(controller) {
+						const reader = response.body.getReader();
+
+						read();
+
+						function read() {
+							reader.read().then(({done, value}) => {
+								if (done) {
+									controller.close();
+									filenameContianer.text('Downloading file')
+									return;
+								}
+								if (!isDownloading) {
+									controller.close()
+									return;
+								};
+								loaded += value.byteLength;
+								progress({loaded, total})
+								controller.enqueue(value);
+								read();
+							}).catch(error => {
+								console.error(error);
+								controller.error(error)
+							})
+						}
+					}
+				})
+			);
+		})
+		.then(response => response.blob())
+		.then(blob => {
+			if (isDownloading) {
+				var a = document.createElement("a");
+				a.href = URL.createObjectURL(blob);
+				a.setAttribute("download", decodeURI(filename));
+				a.click();
+			}
+		})
+		.catch(error => {
+			console.error(error);
+		})
+
+    function progress({loaded, total}) {
+		const percentage = loaded / total * 100
+        indicator.text(Math.round(percentage) + " %");
+		sliderInner.style.width = Math.round(sliderWidth * loaded / total) + "px"
+    }
+}
+
+const downloadFile = () => {
+	const item = $(`.table > div:nth-child(${selectedItem}) > div`)[0];
+	const {type, path} = item.dataset;
+	
+	if (type === "file") {
+		const url = encodeURI(`${window.location.origin}/files/${path}`).replace('#', "%23");
+		download(url, url.split('/')[url.split('/').length - 1])
+	}
+}
+
+const downloadFileHide = () => $("#download-file").addClass("invisible").removeClass('black-op-bg');
+const cancelDownload = () => {
+	isDownloading = false;
+	downloadFileHide()
 }

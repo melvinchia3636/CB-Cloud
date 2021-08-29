@@ -5,6 +5,11 @@
 {% block breadcrumb %}<span class='font-bold'>Recycle Bin</span>{% endblock %}
 
 {% block content %}
+<div class="absolute left-6 bottom-6 w-3/12 messages" style="z-index:9999">
+	{% for message in messages %}
+	<div class="bg-indigo-400 text-white font-medium text-xl py-4 px-5 rounded-lg shadow-md">{{ message }}</div>
+	{% endfor %}
+</div>
 <div class="flex items-center justify-between mt-12 text-indigo-400 font-bold text-3xl">
 	<div class="flex items-center">
 		<span class="iconify w-10 h-10 mr-4" data-icon="uil:trash-alt"></span>
@@ -12,10 +17,8 @@
 	</div>
 	<div class="flex gap-8">
 		<div class="gap-8 hidden" id="func-tools">
-			<button><span class="iconify w-7 h-7 text-gray-700" data-icon="uil:link-h"></span></button>
-			<button><span class="iconify w-7 h-7 text-gray-700" data-icon="uil:unlock-alt"></span></button>
+			<button><span class="iconify w-7 h-7 text-gray-700" data-icon="uil:redo"></span></button>
 			<button onclick="removeFile()"><span class="iconify w-7 h-7 text-gray-700" data-icon="uil:trash-alt"></span></button>
-			<button><span class="iconify w-7 h-7 text-gray-700" data-icon="uil:ellipsis-v"></span></button>
 		</div>
 		<div class="divider-v bg-gray-300 hidden"></div>
 		<div class="flex gap-8">

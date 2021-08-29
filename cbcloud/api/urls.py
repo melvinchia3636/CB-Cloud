@@ -6,4 +6,5 @@ urlpatterns = [
 	path('move-file', views.MoveFile, name="api-move-file"),
 	path('upload-files', views.UploadFiles, name="api-upload-files"),
 	path('remove-file', views.RemoveFiles, name="api-remove-files"),
+	path('permanent-remove', views.PermanentRemove, name="api-permanent-remove")
 ]
