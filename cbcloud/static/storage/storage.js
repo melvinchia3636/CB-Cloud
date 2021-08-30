@@ -14,6 +14,9 @@ const getPath = () => paths.map(e => HTMLParser.parseFromString(e, "text/xml").c
 $('#breadcrumb').append(paths.slice(0, paths.length-1).join(arrow));
 $('#breadcrumb').append(`${paths.length > 1 ? arrow : ""}<span class='font-bold'>${paths[paths.length-1]}</span>`);
 
+const button = document.getElementById('color-pick');
+let picker = new ColorPicker(button, '#5E78FF');
+
 const goto = (item, id) => {
 	const {path, type} = item.dataset;
 	if (selectedItem == id) {
@@ -38,6 +41,15 @@ const newFolderPromptShow = () => {
 
 const newFolderPromptHide = () => {
 	$("#folder-create").addClass("invisible").removeClass('black-op-bg');
+}
+
+const addTagPromptHide = () => {
+	$("#add-tag").addClass("invisible").removeClass('black-op-bg');
+}
+
+const addTagPromptShow = () => {
+	$("#add-tag").removeClass("invisible").addClass('black-op-bg');
+	setTimeout(function() { $('#add-tag input:first-child()').focus() }, 500);
 }
 
 $("#folder-create form").submit(e => {
@@ -245,3 +257,30 @@ const cancelDownload = () => {
 	isDownloading = false;
 	downloadFileHide()
 }
+
+$("#add-tag form").submit(e => {
+	e.preventDefault();
+
+	const tagName = $("#add-tag input").val().trim()
+	const color = picker.element.dataset.color
+
+	if (tagName) {
+		$.ajax({
+			url: "/api/add-tag",
+			method: "POST",
+			headers: {
+				"X-CSRFToken": csrfToken
+			},
+			data: {
+				path: getPath(),
+				name: $(`.table > div:nth-child(${selectedItem}) span`).text(),
+				tag: tagName,
+				color: color
+			},
+			success: () => {
+				addTagPromptHide()
+				setTimeout(() => {location.reload();}, 500)
+			}
+		})
+	}
+})

@@ -5,6 +5,7 @@
 {% block breadcrumb %}{% endblock %}
 
 {% block content %}
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/@r-tek/colr_pickr@2.0.0/build/colr_pickr.min.css"/>
 <div class="absolute left-6 bottom-6 w-3/12 messages" style="z-index:9999">
 	{% for message in messages %}
 	<div class="bg-indigo-400 text-white font-medium text-xl py-4 px-5 rounded-lg shadow-md">{{ message }}</div>
@@ -21,7 +22,7 @@
 			<button><span class="iconify w-7 h-7 text-gray-700" data-icon="uil:unlock-alt"></span></button>
 			<button onclick="downloadFile()"><span class="iconify w-7 h-7 text-gray-700" data-icon="uil:cloud-download"></span></button>
 			<button onclick="removeFile()"><span class="iconify w-7 h-7 text-gray-700" data-icon="uil:trash-alt"></span></button>
-			<button><span class="iconify w-7 h-7 text-gray-700" data-icon="uil:ellipsis-v"></span></button>
+			<button onclick="addTagPromptShow()"><span class="iconify w-7 h-7 text-gray-700" data-icon="uil:tag-alt"></span></button>
 		</div>
 		<div class="divider-v bg-gray-300 hidden"></div>
 		<div class="flex gap-8">
@@ -50,7 +51,7 @@
 					<p class="w-2/12">{{file.last_mod}}</p>
 					<p class="w-2/12">{{file.created}}</p>
 					<p class="w-1/12">{% ifequal file.type "file" %}{%fetchshort file.size %}{% else %}-{% endifequal %}</p>
-					<p class="w-2/12"></p>
+					<p class="text-sm font-semibold px-6 py-1 rounded-full text-white" style="background: {{file.tag.1}}">{{file.tag.0}}</p>
 				</div>
 			</div>
 		</div>
@@ -107,7 +108,28 @@
 		</a>
 	</div>
 </div>
+<div id="add-tag" class="bg-trans transition-all duration-300 delay-200 w-full h-screen fixed top-0 left-0 flex items-center justify-center invisible">
+	<div class="bg-white p-6 rounded-xl shadow-xl">
+		<div class="flex items-center text-indigo-400 font-bold text-2xl">
+			<span class="iconify w-8 h-8 mr-3" data-icon="uil:tag-alt"></span>
+			Add Tag
+		</div>
+		<form>
+			<div class="border-2 rounded-md border-gray-400 flex items-center gap-4 my-6 overflow-hidden">
+				<input type="text" class="text-gray-700 px-4 py-3 w-96 text-xl font-medium" placeholder="Tag name"/>
+				<div id="color-pick" class="w-9 h-9 rounded-full mr-2 shadow-md cursor-pointer"></div>
+			</div>
+			<div class="flex gap-2 justify-end w-full">
+				<a class="font-semibold text-lg text-gray-500 px-5 py-2 rounded-md" onclick="addTagPromptHide()">
+					Cancel
+				</a>
+				<input type="submit" class="bg-indigo-400 font-semibold text-lg text-white px-6 py-2 rounded-md" value="Create">
+			</div>
+		</form>
+	</div>
+</div>
 <input type="file" id="upload" style="display: none" multiple/>
+<script src="https://cdn.jsdelivr.net/npm/@r-tek/colr_pickr@2.0.0/build/colr_pickr.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@shopify/draggable@1.0.0-beta.12/lib/draggable.bundle.js"></script>
 <script>
 	var HTMLParser = new DOMParser()

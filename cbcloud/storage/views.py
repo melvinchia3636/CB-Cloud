@@ -9,17 +9,26 @@ import time
 import json
 
 def requestFiles(path):
+	hiddenFiles = [
+		'.cbtag',
+		'.bin'
+	]
 	abs_path = os.path.join(settings.STORAGE_DIR, path)
+	if os.path.exists(abs_path) and os.path.isfile(os.path.join(abs_path, '.cbtag')):
+		tags = json.load(open(os.path.join(abs_path, '.cbtag'), "r"))
+	else:
+		tags = {}
 	filetypes = json.load(open(staticfiles_storage.path("storage/filetype.json")))
 	if not os.path.exists(abs_path): raise Http404
 	files = []
-	for i in filter(lambda i: not i.startswith('.'), sorted(os.listdir(abs_path), key=lambda i: i.lower())):
+	for i in filter(lambda i: i not in hiddenFiles, sorted(os.listdir(abs_path), key=lambda i: i.lower())):
 		type = "folder" if os.path.isdir(os.path.join(abs_path, i)) else "file"
 		files.append({
 		"type": type,
 		"path": os.path.join(path, i).replace('\\', '/'),
 		"icon": filetypes[i.split('.')[-1].lower()] if type == "file" and i.split('.')[-1].lower() in filetypes else "",
 		"name": i,
+		"tag": tags[i] if i in tags else None,
 		"last_mod": time.strftime("%d %b %Y", time.localtime(os.path.getmtime(os.path.join(abs_path, i)))),
 		"created":  time.strftime("%d %b %Y", time.localtime(os.stat(os.path.join(abs_path, i)).st_ctime)),
 		"size": os.path.getsize(os.path.join(abs_path, i))

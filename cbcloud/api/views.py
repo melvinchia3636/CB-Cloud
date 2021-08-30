@@ -1,5 +1,6 @@
 import os
 import shutil
+import json
 from django.conf import settings
 from django.http import HttpResponse
 from django.core.files.storage import FileSystemStorage
@@ -29,8 +30,26 @@ def MoveFile(request):
 	target_path = os.path.join(settings.STORAGE_DIR, *data.getlist('path[]')[1:], target)
 	if not os.path.exists(source_path) or not os.path.exists(target_path):
 		#error message here
-		...
+		return HttpResponse("okay")
+
 	shutil.move(source_path, target_path)
+
+	source_path = "/".join(source_path.replace('\\', '/').split('/')[:-1])
+
+	if os.path.exists(source_path) and os.path.isfile(os.path.join(source_path, '.cbtag')):
+		data = json.load(open(os.path.join(source_path, '.cbtag'), "r"))
+
+		if source in data:
+			tag, color = data[source]
+			del data[source]
+			json.dump(data, open(os.path.join(source_path, '.cbtag'), "w"))
+
+			if os.path.exists(target_path) and os.path.isfile(os.path.join(target_path, '.cbtag')): ...
+			else: open(os.path.join(target_path, '.cbtag'), "w").write('{}')
+
+			data = json.load(open(os.path.join(target_path, '.cbtag'), "r"))
+			data[source] = [tag, color]
+			json.dump(data, open(os.path.join(target_path, '.cbtag'), "w"))
 	
 	return HttpResponse("okay")
 
@@ -53,8 +72,16 @@ def UploadFiles(request):
 def RemoveFiles(request):
 	data = request.POST
 	name = data.get('name')
-	path = os.path.join(settings.STORAGE_DIR, *data.getlist('path[]')[1:], name).replace('\\', '/').replace('\n', '')
+	path = os.path.join(settings.STORAGE_DIR, *data.getlist('path[]')[1:], name)
 	shutil.move(path, os.path.join(settings.STORAGE_DIR, ".bin"))
+
+	path = "/".join(path.replace('\\', '/').split('/')[:-1])
+	if os.path.exists(path) and os.path.isfile(os.path.join(path, '.cbtag')):
+		data = json.load(open(os.path.join(path, '.cbtag'), "r"))
+
+		if name in data:
+			del data[name]
+			json.dump(data, open(os.path.join(path, '.cbtag'), "w"))
 
 	messages.info(request, f'"{name}" has been moved to bin')
 
@@ -73,5 +100,21 @@ def PermanentRemove(request):
 		else: messages.info(request, f'Failed to delete "{name}"')
 	except:
 		messages.info(request, f'Failed to delete "{name}"')
+
+	return HttpResponse('okay')
+
+def TagAdd(request):
+	data = request.POST
+	tag = data.get("tag")
+	name = data.get('name')
+	color = data.get('color')
+	path = os.path.join(settings.STORAGE_DIR, *data.getlist('path[]')[1:])
+	
+	if os.path.exists(path) and os.path.isfile(os.path.join(path, '.cbtag')): ...
+	else: open(os.path.join(path, '.cbtag'), "w").write('{}')
+
+	data = json.load(open(os.path.join(path, '.cbtag'), "r"))
+	data[name] = [tag, color]
+	json.dump(data, open(os.path.join(path, '.cbtag'), "w"))
 
 	return HttpResponse('okay')
