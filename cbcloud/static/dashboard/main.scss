@@ -4,8 +4,8 @@ html {
 }
 
 body {
-    height: 100%;
     overflow: auto;
+	height: 100%
 }
 
 * {
@@ -122,14 +122,13 @@ a, input[type="submit"] {
 	background:rgba(0, 0, 0, .4)
 }
 
-#folder-create, #download-file, #add-tag {
+#folder-create, #download-file, #add-tag, #collection-create {
 	& > div {
 		transform: translateY(250%);
 		transition: .3s ease-in;
 	}
 
 	&:not(.invisible) > div {
-		transition-delay: .2s;
 		transform: translateY(0%);
 	}
 }
@@ -148,6 +147,10 @@ a, input[type="submit"] {
 .messages {
 	transform: translateY(200%);
 	animation: slideIn .5s cubic-bezier(0.4,0.0,0.2,1) forwards, slideOut 0.5s cubic-bezier(0.4,0.0,0.2,1) 5s forwards
+}
+
+.database-list-item:hover {
+	background: #F6F6F6;
 }
 
 @keyframes slideIn {

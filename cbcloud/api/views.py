@@ -118,3 +118,28 @@ def TagAdd(request):
 	json.dump(data, open(os.path.join(path, '.cbtag'), "w"))
 
 	return HttpResponse('okay')
+
+def CreateCollection(request):
+	data = request.POST
+	name = data.get('name')
+
+	DB_BASEDIR = os.path.join(settings.STORAGE_DIR, ".cbdb")
+	
+	if not os.path.isdir(DB_BASEDIR):
+		os.mkdir(DB_BASEDIR)
+
+	if os.path.isdir(os.path.join(DB_BASEDIR, name)):
+		return HttpResponse('existed', status=409)
+
+	try: os.mkdir(os.path.join(DB_BASEDIR, name))
+	except Exception as e: return HttpResponse(e, status=400)
+
+	return HttpResponse('okay')
+
+def FetchCollection(request):
+	DB_BASEDIR = os.path.join(settings.STORAGE_DIR, ".cbdb")
+
+	if not os.path.isdir(DB_BASEDIR):
+		return HttpResponse(json.dumps([]), content_type="application/json")
+	else:
+		return HttpResponse(json.dumps(sorted(os.listdir(DB_BASEDIR), key=lambda i: "0123456789abcdefghijklmnopqrstuvwxyz".index(i[0].lower()))), content_type="application/json")
