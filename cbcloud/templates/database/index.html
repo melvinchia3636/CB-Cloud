@@ -33,13 +33,13 @@
 		</div>
 		<div class="h-full w-5/12 bg-white shadow-lg rounded-lg overflow-hidden flex flex-col">
 			<div class="bg-indigo-400 w-full py-3 px-4 flex items-center justify-between">
-				<div class="text-white font-bold text-2xl flex items-center">
+				<div class="text-white font-bold text-2xl flex items-center w-10/12">
 					<span class="iconify w-8 h-8 mr-3" data-icon="uil:notebooks"></span>
-					Documents
+					<span class="overflow-ellipsis overflow-hidden doc-title" style="flex-shrink: 9999">Documents</span>
 				</div>
 				<button><span class="iconify w-6 h-6 text-white" data-icon="uil:ellipsis-v"></span></button>
 			</div>
-			<div class="bg-white w-full py-3 px-4 text-indigo-400 font-bold text-xl flex items-center database-list-item transition-all cursor-pointer">
+			<div class="bg-white w-full py-3 px-4 text-indigo-400 font-bold text-xl flex items-center database-list-item transition-all cursor-pointer"  onclick="newDocumentPromptShow()">
 				<span class="iconify w-7 h-7 mr-2" data-icon="uil:plus"></span>
 				Add document
 			</div>
@@ -71,7 +71,27 @@
 				<a class="font-semibold text-lg text-gray-500 px-5 py-2 rounded-md" onclick="newCollectionPromptHide()">
 					Cancel
 				</a>
-				<input type="submit" class="bg-indigo-400 font-semibold text-lg text-white px-6 py-2 rounded-md" value="Create">
+				<input type="submit" class="bg-gray-300 font-semibold text-lg text-gray-400 px-6 py-2 rounded-md transition-all" disabled value="Create">
+			</div>
+		</form>
+	</div>
+</div>
+<div id="document-create" class="bg-trans transition-all duration-300 w-full h-screen fixed top-0 left-0 flex items-center justify-center invisible">
+	<div class="bg-white p-6 rounded-xl shadow-xl">
+		<div class="flex items-center text-indigo-400 font-bold text-2xl">
+			<span class="iconify w-8 h-8 mr-3" data-icon="uil:notebooks"></span>
+			Add Document
+		</div>
+		<form>
+			<div class="border-2 rounded-md border-gray-400 my-6 entry overflow-hidden flex items-center pr-3">
+				<input type="text" class="text-gray-700 rounded-md px-4 py-3 w-96 text-xl font-medium" placeholder="Document ID"/>
+				<a class="text-indigo-400 font-semibold w-16" onclick="generateAutoID(this)">Auto-ID</a>
+			</div>
+			<div class="flex gap-2 justify-end w-full">
+				<a class="font-semibold text-lg text-gray-500 px-5 py-2 rounded-md" onclick="newDocumentPromptHide()">
+					Cancel
+				</a>
+				<input type="submit" class="bg-gray-300 font-semibold text-lg text-gray-400 px-6 py-2 rounded-md transition-all" disabled value="Save">
 			</div>
 		</form>
 	</div>

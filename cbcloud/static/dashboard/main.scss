@@ -122,7 +122,7 @@ a, input[type="submit"] {
 	background:rgba(0, 0, 0, .4)
 }
 
-#folder-create, #download-file, #add-tag, #collection-create {
+#folder-create, #download-file, #add-tag, #collection-create, #document-create {
 	& > div {
 		transform: translateY(250%);
 		transition: .3s ease-in;
@@ -149,7 +149,7 @@ a, input[type="submit"] {
 	animation: slideIn .5s cubic-bezier(0.4,0.0,0.2,1) forwards, slideOut 0.5s cubic-bezier(0.4,0.0,0.2,1) 5s forwards
 }
 
-.database-list-item:hover {
+.database-list-item:not(.bg-indigo-200):hover {
 	background: #F6F6F6;
 }
 
@@ -178,5 +178,12 @@ a, input[type="submit"] {
 
 	100% {
 		transform: scale(0.9)
+	}
+}
+
+input[type="text"], .entry {
+	transition: .3s;
+	&:focus {
+		border-color: #5E78FF
 	}
 }
