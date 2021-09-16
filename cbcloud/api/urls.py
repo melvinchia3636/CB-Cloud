@@ -12,5 +12,6 @@ urlpatterns = [
 
 	#database
 	path('create-collection', views.CreateCollection, name="api-create-collection"),
-	path('fetch-collections', views.FetchCollection, name="api-fetch-collections")
+	path('fetch-collections', views.FetchCollection, name="api-fetch-collections"),
+	path('create-document', views.CreateDocument, name="api-create-document"),
 ]

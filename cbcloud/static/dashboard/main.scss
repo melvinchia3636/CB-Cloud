@@ -122,7 +122,7 @@ a, input[type="submit"] {
 	background:rgba(0, 0, 0, .4)
 }
 
-#folder-create, #download-file, #add-tag, #collection-create, #document-create {
+#folder-create, #download-file, #add-tag, #collection-create, #document-create, #date-picker {
 	& > div {
 		transform: translateY(250%);
 		transition: .3s ease-in;
@@ -199,6 +199,11 @@ input[type="text"], .entry {
 
 	& .list {
 		top: 0 !important;
+		height: 0 !important;
+	}
+
+	&.open .list {
+		height: auto !important
 	}
 }
 
@@ -210,6 +215,7 @@ input[type="text"], .entry {
 		top: 50%;
 		position: absolute;
 		left: -16px;
+		z-index: -1;
 		border-top: 2px dashed #D1D5DB
 	}
 	&.last .field-name::before {
@@ -227,4 +233,38 @@ input[type="text"], .entry {
 		left: 0px;
 		border-left: 2px dashed #D1D5DB
 	}
+}
+
+.day {
+	position: relative;
+
+	&:before {
+		content: "";
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		width: 2.8rem;
+		height: 2.8rem;
+		border-radius: 4rem;
+		background: rgba(0, 0, 0, 0);
+		transition: background-color .1s;
+	}
+
+	&.today:before {
+		background: #CCD4FF
+	}
+
+	&:hover, &.picked {
+		color: white !important;
+		cursor: pointer;
+
+		&:before {
+			background: #5E78FF
+		}
+	}
+}
+
+.scrollbar-track-x {
+	display: none !important
 }

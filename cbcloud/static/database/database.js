@@ -1,3 +1,5 @@
+const zeroPad = (num, places) => String(num).padStart(places, '0')
+
 const newCollectionPromptShow = () => {
 	$("#collection-create").removeClass("invisible").addClass('black-op-bg');
 	$(".add > div").removeClass('show');
@@ -10,9 +12,10 @@ const newCollectionPromptHide = () => {
 }
 
 let isErroring = false;
+let isErroring2 = false;
 
 $("#collection-create input").on('input', e => {
-	if ($("#collection-create input").first().val()) $("#collection-create input").last().prop('disabled', false).addClass('bg-indigo-400 text-white').removeClass('bg-gray-300 text-gray-400')
+	if ($("#collection-create input").first().val().trim()) $("#collection-create input").last().prop('disabled', false).addClass('bg-indigo-400 text-white').removeClass('bg-gray-300 text-gray-400')
 	else $("#collection-create input").last().prop('disabled', true).removeClass('bg-indigo-400 text-white').addClass('bg-gray-300 text-gray-400')
 
 	if (isErroring) {
@@ -30,6 +33,16 @@ const showError = content => {
 		<span class="iconify w-5 h-5 mr-1" data-icon="uil:exclamation-circle"></span>
 		${content}
 	</p>`).insertAfter($("#collection-create input")[0])
+}
+
+const showError2 = content => {
+	if (isErroring2) $("#document-create input").first().parent().parent().find("p").remove()
+	isErroring2 = true;
+	$("#document-create input").first().parent().addClass('border-red-400 mb-2');
+	$(`<p class="text-red-500 font-semibold mb-4 flex items-center">
+		<span class="iconify w-5 h-5 mr-1" data-icon="uil:exclamation-circle"></span>
+		${content}
+	</p>`).insertAfter($("#document-create input").first().parent())
 }
 
 $("#collection-create form").submit(e => {
@@ -116,8 +129,10 @@ const fetchDocuments = collection => {
 
 $(document).ready(function() {
 	$('select').niceSelect();
-	$('.field .option').click(e => updateFieldType(e))
-	stringField($('.field'))
+	$('.field .option').click(e => updateFieldType(e));
+	stringField($('.field'));
+	Scrollbar.init(document.querySelector("#document-create > div"));
+	appendField($('.fields > .last a'));
 })
 
 const newDocumentPromptShow = () => {
@@ -131,11 +146,19 @@ const newDocumentPromptShow = () => {
 const newDocumentPromptHide = () => {
 	$("#document-create").addClass("invisible").removeClass('black-op-bg');
 	$(".fields > .field:not(:last-child)").remove();
-	appendField($('.fields > .last a'))
+	appendField($('.fields > .last a'));
+
+	if (isErroring2) {
+		const entryBox = $("#document-create input");
+		entryBox.first().parent().next().remove()
+		entryBox.parent().removeClass('border-red-400 mb-2');
+		isErroring2 = false;
+		$('.entry').addClass("border-indigo-400")
+	}
 }
 
 $('.entry > input[type="text"]').focus(() => {
-	$('.entry').addClass("border-indigo-400")
+	if (!isErroring2) $('.entry').addClass("border-indigo-400")
 }).blur(() => {
 	$('.entry').removeClass("border-indigo-400")
 });
@@ -163,15 +186,16 @@ $('.entry > input[type="text"]').on("input", e => {
 	else autoIdBtn.text('Auto-ID')
 })
 
-$("#document-create input").on('input', e => {
+$("#document-create input").first().on('input', e => {
 	const entryBox = $("#document-create input");
-	if (entryBox.first().val()) entryBox.last().prop('disabled', false).addClass('bg-indigo-400 text-white').removeClass('bg-gray-300 text-gray-400')
+	if (entryBox.first().val().trim()) entryBox.last().prop('disabled', false).addClass('bg-indigo-400 text-white').removeClass('bg-gray-300 text-gray-400')
 	else entryBox.last().prop('disabled', true).removeClass('bg-indigo-400 text-white').addClass('bg-gray-300 text-gray-400')
 
-	if (isErroring) {
-		entryBox.first().next().remove()
-		entryBox.removeClass('border-red-400 mb-2');
-		isErroring = false;
+	if (isErroring2) {
+		entryBox.first().parent().next().remove()
+		entryBox.parent().removeClass('border-red-400 mb-2');
+		isErroring2 = false;
+		$('.entry').addClass("border-indigo-400")
 	}
 })
 
@@ -183,13 +207,27 @@ const appendField = btn => {
 	stringField($(template))
 }
 
+
+const appendArrayField = btn => {
+	const template = $($('#value-field').html());
+	const index = $(btn).parent().parent().parent().children(".field").length-1;
+	template.find(".field-name").empty().append(`
+		<div class="font-semibold bg-white relative pl-3">${index}</div>
+	`);
+	template.find('div:first-child').parent().css('align-items', "center");
+	$(btn).parent().parent().before(template);
+	$('select').niceSelect();
+	$('.field .option').click(e => updateFieldType(e));
+	stringField($(template))
+}
+
 const removeField = btn => {
-	$(btn).parents('.field').remove()
+	$($(btn).parents('.field')[0]).remove()
 }
 
 const updateFieldType = e => {
 	const newType = e.target.innerHTML;
-	const field = $(e.target).parents('.field');
+	const field = $($(e.target).parents('.field')[0]);
 	switch (newType) {
 		case "string":
 			stringField(field);
@@ -209,6 +247,18 @@ const updateFieldType = e => {
 
 		case "geopoint":
 			geoField(field);
+			break;
+
+		case "timestamp":
+			timestampField(field);
+			break;
+
+		case "map":
+			mapField(field);
+			break;
+
+		case "array":
+			arrayField(field);
 			break;
 	
 		default:
@@ -237,7 +287,8 @@ const removeFieldError = field => {
 }
 
 const fieldDisplay = (field, hide) => {
-	field.find('.bool, .geo').css('display', 'none');
+	field.find('.bool, .geo, .timestamp').css('display', 'none');
+	field.find('.map, .array').remove()
 	field.find('* > .val:first-child').val("").css('display', hide ? "none" : "flex").parent().parent().parent().css('align-items', hide ? "center" : 'flex-start')
 }
 
@@ -262,6 +313,25 @@ const geoField = field => {
 	field.find('.geo').css('display', 'flex');
 }
 
+const timestampField = field => {
+	fieldDisplay(field, true);
+	field.find('.timestamp').css('display', 'flex');
+}
+
+const mapField = field => {
+	const template = $($('#map-fields').html());
+	fieldDisplay(field, true);
+	field.append(template);
+	appendField(template.find('.last a'));
+}
+
+const arrayField = field => {
+	const template = $($('#array-fields').html());
+	fieldDisplay(field, true);
+	field.append(template);
+	appendArrayField(template.find('.last a'));
+}
+
 const numberField = field => {
 	fieldDisplay(field)
 	const checkNum = (f, emptyCheck) => {
@@ -272,4 +342,198 @@ const numberField = field => {
 	}
 	checkNum($(field).find('.val'), false);
 	$(field).find('.val').off('input').on('input', e => checkNum(e.target, true))
+}
+
+const datePickerShow = e => {
+	$("#date-picker").removeClass("invisible").addClass('black-op-bg');
+	$(".add > div").removeClass('show');
+	const input = $('#date-picker input:first-child()').val('');
+	setTimeout(function() { input.focus() }, 500);
+
+	if (date = new Date($(e).parent().find('input').val())) {
+		if (date instanceof Date && !isNaN(date.valueOf())) {
+			generateCalendar(date, true);
+			return
+		}
+	}
+
+	const today = new Date();
+	generateCalendar(today);
+	$('.today').addClass('picked');
+	pickDate = funcPickDate.bind($(e).parent())
+}
+
+const datePickerHide = () => {
+	$("#date-picker").addClass("invisible").removeClass('black-op-bg');
+}
+
+const generateCalendar = (date, useDate) => {
+	const months = ["January","February","March","April","May","June","July",
+            "August","September","October","November","December"];
+	const year = 1900 + date.getYear();
+	const month = date.getMonth();
+	const firstDay = new Date(year, month, 1).getDay();
+	const daysCount = new Date(year, month+1, 0).getDate();
+	const days = Array(firstDay).fill(0).concat(Array(daysCount).fill().map((_, i) => i+1));
+	const today = new Date();
+
+	$("#date-picker .ym").text(`${months[month]} ${year}`).attr("id", `${month}-${year}`);
+
+	$('.calendar').empty().append(Array(6).fill().map(() => `<div class="flex justify-center gap-8 mb-6 font-semibold">${`<p class="w-6 flex justify-center items-center" onclick="setDate(this)">&nbsp;</p>`.repeat(7)}</div>`).join("")).find("p").each((_, e) => (d = days.shift()) ? $(e).addClass('day').addClass(today.getMonth() === month && today.getYear() === year - 1900 && d === today.getDate() ? "today": "").addClass((useDate && date.getDate() === d) ? "picked" : "").empty().append(`<span class="relative">${d}</span>`) : null);
+}
+
+var pickDate;
+
+function funcPickDate() {
+	const date = parseInt($('.calendar .day.picked').text());
+	if (!isNaN(date)) {
+		const [month, year] = $("#date-picker .ym").attr('id').split("-").map(e => parseInt(e));
+		this.find("input").val(`${zeroPad(month+1, 2)}/${zeroPad(date, 2)}/${year}`);
+		datePickerHide();
+	}
+	
+}
+
+const gotoMonth = direction => {
+	const [month, year] = $("#date-picker .ym").attr('id').split("-").map(e => parseInt(e));
+	const date = new Date(year, month, 1);
+	generateCalendar(new Date(date.setMonth(date.getMonth() + (direction ? 1 : -1))))
+}
+
+const setDate = e => {
+	$('.calendar p').removeClass("picked");
+	$(e).addClass("picked");
+}
+
+$("#document-create form").submit(e => {
+	e.preventDefault()
+
+	const collectionName = $('.database-list-item.bg-indigo-200').text().trim();
+	const documentName = $("#document-create input:first-child").val().trim();
+	const data = fetchDocData($('.fields').first());
+	
+	if (collectionName && documentName) {
+		if (documentName.match(/^([0-9]|[a-z]|_)+([0-9a-z_]+)$/i)) {
+			$.ajax({
+				url: "/api/create-document",
+				method: "POST",
+				headers: {
+					"X-CSRFToken": csrfToken
+				},
+				data: {
+					document: documentName,
+					collection: collectionName,
+					data: JSON.stringify(data)
+				},
+				success: () => {
+					newDocumentPromptHide()
+				},
+				error: e => {
+					if (e.status === 409 && e.responseText === "existed") showError2("Collection already existed")
+					else showError2("Unexpected Error")
+				}
+			})
+		} else {
+			showError2("Only alphanumeric characters allowed")
+		}
+	} else {
+		showError2("Must specify document name")
+	}
+})
+
+const fetchDocData = (e, isArr) => {
+	const data = isArr ? [] : {};
+	e.children(".field:not(.last)").each((_, e) => {
+		const type = $(e).find(".current").first().text();
+		switch (type) {
+			case "string":
+				if (isArr) {
+					data.push([0, $(e).find(".val").first().val()]);
+					break
+				}
+				if (n = $(e).find(".field-name").first().find("input").val().trim()) {
+					data[n] = [0, $(e).find(".val").first().val()];
+				}
+				break;
+
+			case "number":
+				if (isArr) {
+					if (value && !isNaN(parseFloat(value)) && isFinite(value)) {
+						data.push([1, parseFloat(value)])
+					}
+					break;
+				}
+				if (n = $(e).find(".field-name").first().find("input").val().trim()) {
+					const value = $(e).find(".val").first().val();
+					if (value && !isNaN(parseFloat(value)) && isFinite(value)) {
+						data[n] = [1, parseFloat(value)]
+					}
+				}
+				break;
+
+			case "boolean":
+				if (isArr) {
+					data.push([2, $(e).find(".bool .current").first().text() == "true" ? true : false]);
+					break;
+				};
+				if (n = $(e).find(".field-name").first().find("input").val().trim()) {
+					data[n] = [2, $(e).find(".bool .current").first().text() == "true" ? true : false];
+				}
+				break;
+
+			case "null":
+				if (isArr) {
+					data.push([3, null]);
+					break;
+				};
+				if (n = $(e).find(".field-name").first().find("input").val().trim()) {
+					data[n] = [3, null];
+				}
+				break;
+
+			case "map":
+				if (isArr) {
+					data.push([4, fetchDocData($(e).find('.fields.map').first())]);
+					break;
+				};
+				if (n = $(e).find(".field-name").first().find("input").val().trim()) {
+					data[n] = [4, fetchDocData($(e).find('.fields.map').first())]
+				}
+				break;
+
+			case "array":
+				if (isArr) {
+					data.push([5, fetchDocData($(e).find('.fields.array').first(), true)]);
+					break;
+				};
+				if (n = $(e).find(".field-name").first().find("input").val().trim()) {
+					data[n] = [5, fetchDocData($(e).find('.fields.array').first(), true)]
+				}
+				break;
+
+			case "timestamp":
+				if (isArr) {
+					data.push([6, [$(e).find(".date").val(), $(e).find(".time").val()]]);
+					break;
+				};
+				if (n = $(e).find(".field-name").first().find("input").val().trim()) {
+					data[n] = [6, [$(e).find(".date").val(), $(e).find(".time").val()]]
+				}
+				break;
+
+			case "geopoint":
+				if (isArr) {
+					data.push([6, [$(e).find(".lat").val(), $(e).find(".lon").val()]]);
+					break;
+				};
+				if (n = $(e).find(".field-name").first().find("input").val().trim()) {
+					data[n] = [6, [$(e).find(".lat").val(), $(e).find(".lon").val()]]
+				}
+				break;
+		
+			default:
+				break;
+		}
+	});
+	return data;
 }

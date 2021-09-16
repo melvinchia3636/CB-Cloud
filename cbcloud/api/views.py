@@ -143,3 +143,22 @@ def FetchCollection(request):
 		return HttpResponse(json.dumps([]), content_type="application/json")
 	else:
 		return HttpResponse(json.dumps(sorted(os.listdir(DB_BASEDIR), key=lambda i: "0123456789abcdefghijklmnopqrstuvwxyz".index(i[0].lower()))), content_type="application/json")
+
+def CreateDocument(request):
+	data = request.POST
+	collection = data.get('collection')
+	document = data.get('document')
+	data = data.get("data")
+	DB_BASEDIR = os.path.join(settings.STORAGE_DIR, ".cbdb")
+
+	if not os.path.isdir(os.path.join(DB_BASEDIR, collection)):
+		return HttpResponse(status=403)
+
+	if os.path.isdir(os.path.join(DB_BASEDIR, collection, document)):
+		return HttpResponse('existed', status=409)
+
+	print(data)
+	try: open(os.path.join(DB_BASEDIR, collection, document), 'w').write(data)
+	except Exception as e: return HttpResponse(e, status=400)
+
+	return HttpResponse('okay')
