@@ -157,8 +157,29 @@ def CreateDocument(request):
 	if os.path.isdir(os.path.join(DB_BASEDIR, collection, document)):
 		return HttpResponse('existed', status=409)
 
-	print(data)
 	try: open(os.path.join(DB_BASEDIR, collection, document), 'w').write(data)
 	except Exception as e: return HttpResponse(e, status=400)
 
 	return HttpResponse('okay')
+
+def FetchDocument(request):
+	data = request.GET
+	collection = data.get('collection')
+	DB_BASEDIR = os.path.join(settings.STORAGE_DIR, ".cbdb")
+
+	if not collection or not os.path.isdir(os.path.join(DB_BASEDIR, collection)):
+		return HttpResponse(json.dumps([]), content_type="application/json")
+	else:
+		return HttpResponse(json.dumps(sorted(os.listdir(os.path.join(DB_BASEDIR, collection)), key=lambda i: "0123456789abcdefghijklmnopqrstuvwxyz".index(i[0].lower()))), content_type="application/json")
+
+def fetchDocContent(request):
+	data = request.GET
+	collection = data.get('collection')
+	document = data.get('document')
+	DB_BASEDIR = os.path.join(settings.STORAGE_DIR, ".cbdb")
+
+	if collection and document and os.path.isfile(os.path.join(DB_BASEDIR, collection, document)):
+		try: return HttpResponse(open(os.path.join(DB_BASEDIR, collection, document), 'r').read(), content_type="application/json")
+		except Exception as e: return HttpResponse(json.dumps({}), content_type="application/json")
+	else:
+		return HttpResponse(json.dumps({}), content_type="application/json")

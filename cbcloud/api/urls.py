@@ -14,4 +14,6 @@ urlpatterns = [
 	path('create-collection', views.CreateCollection, name="api-create-collection"),
 	path('fetch-collections', views.FetchCollection, name="api-fetch-collections"),
 	path('create-document', views.CreateDocument, name="api-create-document"),
+	path('fetch-document', views.FetchDocument, name="api-fetch-document"),
+	path('fetch-doc-content', views.fetchDocContent, name="api-fetch-doc-content")
 ]

@@ -1,5 +1,23 @@
 const zeroPad = (num, places) => String(num).padStart(places, '0')
 
+
+function convertDEGToDMS(deg, lat) {
+    const absolute = Math.abs(deg);
+
+    const degrees = Math.floor(absolute);
+    const minutesNotTruncated = (absolute - degrees) * 60;
+    const minutes = Math.floor(minutesNotTruncated);
+    const seconds = ((minutesNotTruncated - minutes) * 60).toFixed(2);
+
+    if (lat) {
+        var direction = deg >= 0 ? "N" : "S";
+    } else {
+        var direction = deg >= 0 ? "E" : "W";
+    }
+
+    return `<span class="text-purple-500">${degrees + "° " + minutes + "' " + seconds + "\" " + direction}</span>`;
+}
+
 const newCollectionPromptShow = () => {
 	$("#collection-create").removeClass("invisible").addClass('black-op-bg');
 	$(".add > div").removeClass('show');
@@ -114,17 +132,70 @@ const changeCollection = collection => {
 	$(".coll > div > svg").remove()
 	$(".coll > div").removeClass("bg-indigo-200 text-indigo-400 flex items-center justify-between").attr("onclick", 'changeCollection(this)')
 	$(collection).addClass("bg-indigo-200 text-indigo-400 flex items-center justify-between").removeAttr("onclick").append('<span class="iconify w-7 h-7 flex-shrink-0" data-icon="uil:angle-right"></span>')
-	fetchDocuments(collection)
+	fetchDocuments($(collection).text().trim())
 }
 
 const fetchDocuments = collection => {
 	if (collection) $(".doc-title").text($(collection).text() || collection);
 	else $('.doc-add').css("display", "none");
-	/*
 	$.ajax({
-		url: "api-fetch-document"
+		url: "/api/fetch-document",
+		data: {
+			collection: collection
+		},
+		success: res => {
+			$('.docs').empty()
+			if (res) {
+				$('.docs').append(res.map((e, i) => `
+				<div class="${!i ? "bg-indigo-200 text-indigo-400 flex items-center justify-between" : ""} bg-white w-full py-3 px-4 font-bold text-xl flex items-center document-list-item transition-all cursor-pointer gap-4" ${i ? `onclick='changeDocument(this)'`: ""}>
+					<span class="overflow-hidden overflow-ellipsis block">${e}</span>
+					${!i ? '<span class="iconify w-7 h-7 flex-shrink-0" data-icon="uil:angle-right"></span>' : ""}
+				</div>
+				`).join(''));
+				fetchDocContent(res[0])
+			} else {
+				fetchDocContent('')
+			}
+			const ps = new PerfectScrollbar('.docs');
+		}
 	})
-	*/
+}
+
+const changeDocument = document => {
+	$(".docs > div > svg").remove()
+	$(".docs > div").removeClass("bg-indigo-200 text-indigo-400 flex items-center justify-between").attr("onclick", 'changeDocument(this)')
+	$(document).addClass("bg-indigo-200 text-indigo-400 flex items-center justify-between").removeAttr("onclick").append('<span class="iconify w-7 h-7 flex-shrink-0" data-icon="uil:angle-right"></span>')
+	fetchDocContent($(document).text().trim())
+}
+
+const updateDocument = name => {
+	$('.docs').append(
+		`<div class="bg-white w-full py-3 px-4 font-bold text-xl flex items-center document-list-item transition-all cursor-pointer new" onclick='changeDocument(this)'>
+			${name}
+		</div>`
+	);
+	$(".new").click();
+	$(".new").removeClass(".new");
+}
+
+const fetchDocContent = document => {
+	const collection = $('.database-list-item.bg-indigo-200').text().trim();
+	if (document) {$('.doc-content-add').css("display", "flex"); $(".doc-content-title").text($(document).text() || document);}
+	else $('.doc-content-add').css("display", "none");
+	$.ajax({
+		url: "/api/fetch-doc-content",
+		data: {
+			collection,
+			document
+		},
+		success: res => {
+			$('.doc-content').empty()
+			if (res) {
+				$('.doc-content').append(generateDocContentDOM(res))
+			}
+			const ps = new PerfectScrollbar('.doc-content');
+		}
+	})
 }
 
 $(document).ready(function() {
@@ -426,7 +497,8 @@ $("#document-create form").submit(e => {
 					data: JSON.stringify(data)
 				},
 				success: () => {
-					newDocumentPromptHide()
+					newDocumentPromptHide();
+					updateDocument(documentName)
 				},
 				error: e => {
 					if (e.status === 409 && e.responseText === "existed") showError2("Collection already existed")
@@ -536,4 +608,49 @@ const fetchDocData = (e, isArr) => {
 		}
 	});
 	return data;
+}
+
+const generateDocContentDOM = res => {
+	const dom = $(document.createDocumentFragment());
+	Object.entries(res).map(([key, [type, value]]) => {
+		const item = $(document.createDocumentFragment());
+		switch (type) {
+			case 0: case 1:
+				item.append(`
+				<div class="bg-white w-full py-1 px-5 font-semibold text-lg flex items-center item transition-all cursor-pointer gap-4">
+						<span class="text-gray-500">${key}:</span> <span class="text-xl">${value}</span>
+					</div>
+				`);
+				break;
+
+				case 2:
+					item.append(`
+					<div class="bg-white w-full py-1 px-5 font-semibold text-lg flex items-center item transition-all cursor-pointer gap-4">
+							<span class="text-gray-500">${key}:</span> <span class="${value ? "text-green-500" : "text-red-500"} text-xl">${value}</span>
+						</div>
+					`);
+					break;
+
+				case 3:
+					item.append(`
+					<div class="bg-white w-full py-1 px-5 font-semibold text-lg flex items-center item transition-all cursor-pointer gap-4">
+							<span class="text-gray-500">${key}:</span> <span class="text-red-800 text-xl">${value}</span>
+						</div>
+					`);
+					break;
+
+				case 6:
+					item.append(`
+					<div class="bg-white w-full py-1 px-5 font-semibold text-lg flex items-center item transition-all cursor-pointer gap-4">
+							<span class="text-gray-500">${key}:</span> <span class="text-xl">[${value.map((e, i) => convertDEGToDMS(e, i)).join(", ")}]</span>
+						</div>
+					`);
+					break;
+		
+			default:
+				break;
+		}
+		dom.append(item);
+	})
+	return dom;
 }
