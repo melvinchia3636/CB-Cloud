@@ -23,7 +23,12 @@ const goto = (item, id) => {
 		if (type === "folder") {
 			window.location += (!(window.location.href[window.location.href.length-1] === "/") ? "/" : "") + path;
 		} else {
-			window.open(encodeURI(`${window.location.origin}/files/${path}`).replace('#', "%23"), "_blank");
+			const _path = path.toLowerCase().split(".")
+			if (["jpg", "png"].includes(_path[_path.length-1])) {
+				openImageViewer(path)
+			} else {
+				window.open(encodeURI(`${window.location.origin}/files/${path}`).replace('#', "%23"), "_blank");
+			}
 		}
 	} else {
 		if (selectedItem) $(`.table div:nth-child(${selectedItem}) > div > div`).removeClass('bg-indigo-200');
@@ -284,3 +289,59 @@ $("#add-tag form").submit(e => {
 		})
 	}
 })
+
+$('.file-row').contextmenu(e => {
+	e.preventDefault();
+	e.target.click();
+	const { clientX, clientY } = e.originalEvent;
+	$(".cm-cover").addClass("block");
+	$('.contextmenu').addClass("h-56").css("top", clientY+"px").css("left", clientX+"px")
+})
+
+$(".cm-cover").click(() => {
+	$('.contextmenu').removeClass("h-56")
+	$(".cm-cover").removeClass("block")
+})
+
+$(".cm-cover").contextmenu(e => {
+	e.preventDefault();
+	$('.contextmenu').removeClass("h-56")
+	$(".cm-cover").removeClass("block")
+})
+
+const openImageViewer = (path) => {
+	const allImages = $(".file-row").children().map((_,e) => e.dataset.path).get().filter(e => {const path = e.split("."); return ["jpg", "png"].includes(path[path.length-1])})
+	$(".image-container").attr("src", `${window.location.origin}/files/${path}`.replace('#', "%23")).attr("data-index", allImages.indexOf(path))
+	$(".other-images").empty().append(allImages.map((e, i) => `<img data-index="${i}" class="h-16 transition-all ${e === path ? "current-image" : ""}" src="${`${window.location.origin}/files/${e}`.replace('#', "%23")}" />`).join(""))
+	$(".img-viewer, .img-viewer-cover").removeClass("hidden")
+	setTimeout(() => {
+		$(".img-viewer-cover").addClass("opacity-100")
+		$(".img-viewer").addClass("-translate-y-1/2")
+	}, 10)	
+}
+
+const closeImageViewer = () => {
+	$(".img-viewer-cover").removeClass("opacity-100")
+	$(".img-viewer").removeClass("-translate-y-1/2")
+	setTimeout(() => {
+		$(".img-viewer, .img-viewer-cover").addClass("hidden")
+	}, 510)
+}
+
+const imgViewerNextImage = () => {
+	const allImages = $(".file-row").children().map((_,e) => e.dataset.path).get().filter(e => {const path = e.split("."); return ["jpg", "png"].includes(path[path.length-1])})
+	let pathIndex = parseInt($(".image-container")[0].dataset.index, 10) + 1;
+	pathIndex = pathIndex >= allImages.length ? 0 : pathIndex
+	$(".image-container").attr("src", `${window.location.origin}/files/${allImages[pathIndex]}`.replace('#', "%23")).attr("data-index", pathIndex)
+	$(".other-images .current-image").removeClass("current-image")
+	$(`.other-images img[data-index=${pathIndex}]`).addClass("current-image")
+}
+
+const imgViewerLastImage = () => {
+	const allImages = $(".file-row").children().map((_,e) => e.dataset.path).get().filter(e => {const path = e.split("."); return ["jpg", "png"].includes(path[path.length-1])})
+	let pathIndex = parseInt($(".image-container")[0].dataset.index, 10) - 1;
+	pathIndex = pathIndex < 0 ? allImages.length - 1 : pathIndex
+	$(".image-container").attr("src", `${window.location.origin}/files/${allImages[pathIndex]}`.replace('#', "%23")).attr("data-index", pathIndex)
+	$(".other-images .current-image").removeClass("current-image")
+	$(`.other-images img[data-index=${pathIndex}]`).addClass("current-image")
+}

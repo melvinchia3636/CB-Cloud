@@ -5,6 +5,11 @@
 {% block breadcrumb %}{% endblock %}
 
 {% block content %}
+<style>
+.block {
+	display: block !important
+}
+</style>
 <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/@r-tek/colr_pickr@2.0.0/build/colr_pickr.min.css"/>
 <div class="absolute left-6 bottom-6 w-3/12 messages" style="z-index:9999">
 	{% for message in messages %}
@@ -128,6 +133,37 @@
 		</form>
 	</div>
 </div>
+<div class="absolute w-screen h-screen top-0 left-0 hidden cm-cover"></div>
+<div class="fixed h-0 flex flex-col overflow-hidden contextmenu bg-white shadow-md rounded-md p-0 transition-all">
+	<button class="flex gap-4 items-center text-gray-700 font-medium text-lg transition-all bg-white hover:bg-gray-50 px-4 py-3 pt-4">
+		<span class="iconify w-6 h-6 text-gray-700" data-icon="uil:cloud-download"></span>
+		Download file
+	</button>
+	<button class="flex gap-4 items-center text-gray-700 font-medium text-lg transition-all bg-white hover:bg-gray-50 px-4 py-3">
+		<span class="iconify w-6 h-6 text-gray-700" data-icon="uil:tag-alt"></span>
+		Add Tag
+	</button>
+	<button class="flex gap-4 items-center text-gray-700 font-medium text-lg transition-all bg-white hover:bg-gray-50 px-4 py-3">
+		<span class="iconify w-6 h-6 text-gray-700" data-icon="uil:unlock-alt"></span>
+		Lock document
+	</button>
+	<button class="flex gap-4 items-center text-red-400 font-medium text-lg transition-all bg-white hover:bg-gray-50 px-4 py-3 pb-4">
+		<span class="iconify w-6 h-6 text-red-400" data-icon="uil:trash-alt"></span>
+		Move to bin
+	</button>
+</div>
+<div class="w-full img-viewer-cover h-screen bg-black bg-opacity-50 fixed top-0 left-0 transition-all opacity-0 hidden duration-500" onclick="closeImageViewer()"></div>
+<div class="img-viewer bg-white shadow-xl rounded-xl absolute flex flex-col top-1/2 left-1/2 p-8 transform -translate-x-1/2 translate-y-full transition-all duration-500 hidden" style="height: calc(100% - 8rem); width: calc(100% - 16rem)">
+	<div class="flex flex-grow-0 justify-between flex-shrink gap-8 items-center w-full h-full">
+		<button onclick="imgViewerLastImage()"><span class="iconify w-12 h-12 text-blue-500" data-icon="uil:angle-left"></span></button>
+		<div class="h-full flex-shrink flex items-center justify-center"><img class="image-container w-full" src="" /></div>
+		<button onclick="imgViewerNextImage()"><span class="iconify w-12 h-12 text-blue-500" data-icon="uil:angle-right"></span></button>
+	</div>
+	<div class="flex-shrink-0">
+		<div class="flex gap-2 items-center overflow-scroll other-images"></div>
+	</div>
+</div>
+
 <input type="file" id="upload" style="display: none" multiple/>
 <script src="https://cdn.jsdelivr.net/npm/@r-tek/colr_pickr@2.0.0/build/colr_pickr.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@shopify/draggable@1.0.0-beta.12/lib/draggable.bundle.js"></script>

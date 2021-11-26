@@ -54,6 +54,16 @@
 		{% endfor %}
 	</div>
 </div>
+<div class="flex gap-4 fixed bottom-6 right-6">
+	<button class="bg-indigo-400 pl-7 pr-8 py-4 rounded-md shadow-md text-white font-medium text-xl flex items-center gap-2">
+		<span class="iconify w-7 h-7 text-white" data-icon="uil:redo"></span>
+		Recover All
+	</button>
+	<button class="bg-red-400 pl-7 pr-8 py-4 rounded-md shadow-md text-white font-medium text-xl flex items-center gap-2">
+		<span class="iconify w-7 h-7 text-white" data-icon="uil:trash-alt"></span>
+		Delete All
+	</button>
+</div>
 <script>
 	var HTMLParser = new DOMParser()
 	var csrfToken = HTMLParser.parseFromString(`{% csrf_token %}`, "text/html").querySelector("input").value

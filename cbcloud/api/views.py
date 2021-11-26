@@ -95,7 +95,7 @@ def PermanentRemove(request):
 	try:
 		if os.path.exists(path): 
 			messages.info(request, f'"{name}" has been permanently deleted')
-			if os.path.isdir(path): os.rmdir(path)
+			if os.path.isdir(path): shutil.rmtree(path)
 			else: os.remove(path.replace('\\', '/'))
 		else: messages.info(request, f'Failed to delete "{name}"')
 	except:

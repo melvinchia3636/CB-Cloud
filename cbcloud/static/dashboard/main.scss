@@ -268,3 +268,13 @@ input[type="text"], .entry {
 .scrollbar-track-x {
 	display: none !important
 }
+
+.block {
+	display: block !important
+}
+
+.current-image {
+	outline: 2px solid #999999 !important;
+	outline-offset: 2px;
+	margin: 4px
+}
