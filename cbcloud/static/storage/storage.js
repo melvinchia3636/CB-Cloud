@@ -312,12 +312,19 @@ $(".cm-cover").contextmenu(e => {
 const openImageViewer = (path) => {
 	const allImages = $(".file-row").children().map((_,e) => e.dataset.path).get().filter(e => {const path = e.split("."); return ["jpg", "png"].includes(path[path.length-1])})
 	$(".image-container").attr("src", `${window.location.origin}/files/${path}`.replace('#', "%23")).attr("data-index", allImages.indexOf(path))
-	$(".other-images").empty().append(allImages.map((e, i) => `<img data-index="${i}" class="h-16 transition-all ${e === path ? "current-image" : ""}" src="${`${window.location.origin}/files/${e}`.replace('#', "%23")}" />`).join(""))
+	$(".other-images").empty().append(allImages.map((e, i) => `<img data-index="${i}" class="h-16 ${e === path ? "current-image" : ""}" src="${`${window.location.origin}/files/${e}`.replace('#', "%23")}" />`).join(""))
 	$(".img-viewer, .img-viewer-cover").removeClass("hidden")
 	setTimeout(() => {
 		$(".img-viewer-cover").addClass("opacity-100")
 		$(".img-viewer").addClass("-translate-y-1/2")
-	}, 10)	
+		setTimeout(() => {
+			$('.other-images .current-image')[0].scrollIntoView({
+				behavior: 'smooth',
+				block: 'center',
+				inline: 'center'
+			});
+		}, 400)
+	}, 10)
 }
 
 const closeImageViewer = () => {
@@ -334,7 +341,11 @@ const imgViewerNextImage = () => {
 	pathIndex = pathIndex >= allImages.length ? 0 : pathIndex
 	$(".image-container").attr("src", `${window.location.origin}/files/${allImages[pathIndex]}`.replace('#', "%23")).attr("data-index", pathIndex)
 	$(".other-images .current-image").removeClass("current-image")
-	$(`.other-images img[data-index=${pathIndex}]`).addClass("current-image")
+	$(`.other-images img[data-index=${pathIndex}]`).addClass("current-image")[0].scrollIntoView({
+		behavior: 'smooth',
+		block: 'center',
+		inline: 'center'
+	});
 }
 
 const imgViewerLastImage = () => {
@@ -343,5 +354,9 @@ const imgViewerLastImage = () => {
 	pathIndex = pathIndex < 0 ? allImages.length - 1 : pathIndex
 	$(".image-container").attr("src", `${window.location.origin}/files/${allImages[pathIndex]}`.replace('#', "%23")).attr("data-index", pathIndex)
 	$(".other-images .current-image").removeClass("current-image")
-	$(`.other-images img[data-index=${pathIndex}]`).addClass("current-image")
+	$(`.other-images img[data-index=${pathIndex}]`).addClass("current-image")[0].scrollIntoView({
+		behavior: 'smooth',
+		block: 'center',
+		inline: 'center'
+	});
 }
