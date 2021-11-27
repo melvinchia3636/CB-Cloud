@@ -31,36 +31,59 @@
 		</div>
 		<div class="divider-v bg-gray-300 hidden"></div>
 		<div class="flex gap-8">
-			<button><span class="iconify w-7 h-7 text-gray-700" data-icon="tabler:layout-grid"></span></button>
+			<button onclick="changeView(this)"><span class="iconify w-7 h-7 text-gray-700" data-icon="tabler:layout-grid"></span></button>
 			<button><span class="iconify w-7 h-7 text-gray-700" data-icon="uil:info-circle"></span></button>
 		</div>
 	</div>
 </div>
-<div class="text-left text-gray-500 font-semibold border-b-2 border-gray-200 mt-6 flex w-full">
-	<p class="w-5/12 py-2">Name</p>
-	<p class="w-2/12">Last Modified</p>
-	<p class="w-2/12">Date Created</p>
-	<p class="w-1/12">Size</p>
-	<p class="w-2/12">Tags</p>
-</div>
-<div class="h-full overflow-y-hidden mt-0.5 tab relative">
-	<div class="w-full table">
-		{% for file in files %}
-		<div class="border-b-2 bg-gray-100 transition-colors border-gray-200 font-medium text-lg file-row dropzone draggable-dropzone--occupied">
-			<div class="flex items-center transition-colors item" onclick="goto(this, {{ forloop.counter }})" data-type="{{ file.type }}" data-path="{% ifequal file.type "folder" %}{{file.name}}{% else %}{{file.path}}{% endifequal %}">
-				<div class="flex items-center w-full">
-					<p class="w-5/12 py-3 font-semibold text-xl flex items-center pl-2 pr-4 whitespace-nowrap">
-						<span class="iconify w-8 h-8 mr-4 text-indigo-400" data-icon="{% ifequal file.type 'folder' %}bx:bxs-folder{% else %}{% if file.icon %}{{file.icon}}{% else %}bi:file-earmark-fill{% endif %}{% endifequal %}"></span>
-						<span class="overflow-ellipsis overflow-hidden" style="max-width: 20rem">{{file.name}}</span>
-					</p>
-					<p class="w-2/12">{{file.last_mod}}</p>
-					<p class="w-2/12">{{file.created}}</p>
-					<p class="w-1/12">{% ifequal file.type "file" %}{%fetchshort file.size %}{% else %}-{% endifequal %}</p>
-					<p class="text-sm font-semibold px-6 py-1 rounded-full text-white" style="background: {{file.tag.1}}">{{file.tag.0}}</p>
+<div class="file-list hidden">
+	<div class="text-left text-gray-500 font-semibold border-b-2 border-gray-200 mt-6 flex w-full">
+		<p class="w-5/12 pb-2">Name</p>
+		<p class="w-2/12">Last Modified</p>
+		<p class="w-2/12">Date Created</p>
+		<p class="w-1/12">Size</p>
+		<p class="w-2/12">Tags</p>
+	</div>
+	<div class="h-full overflow-y-hidden mt-0.5 tab relative">
+		<div class="w-full table">
+			{% for file in files %}
+			<div class="border-b-2 bg-gray-100 transition-colors border-gray-200 font-medium text-lg file-row dropzone draggable-dropzone--occupied">
+				<div class="flex items-center transition-colors item" onclick="goto(this, {{ forloop.counter }})" data-type="{{ file.type }}" data-path="{% ifequal file.type "folder" %}{{file.name}}{% else %}{{file.path}}{% endifequal %}">
+					<div class="flex items-center w-full">
+						<p class="w-5/12 py-3 font-semibold text-xl flex items-center pl-2 pr-4 whitespace-nowrap">
+							<span class="iconify w-8 h-8 mr-4 text-indigo-400" data-icon="{% ifequal file.type 'folder' %}bx:bxs-folder{% else %}{% if file.icon %}{{file.icon}}{% else %}bi:file-earmark-fill{% endif %}{% endifequal %}"></span>
+							<span class="overflow-ellipsis overflow-hidden" style="max-width: 20rem">{{file.name}}</span>
+						</p>
+						<p class="w-2/12">{{file.last_mod}}</p>
+						<p class="w-2/12">{{file.created}}</p>
+						<p class="w-1/12">{% ifequal file.type "file" %}{%fetchshort file.size %}{% else %}-{% endifequal %}</p>
+						<p class="text-sm font-semibold px-6 py-1 rounded-full text-white" style="background: {{file.tag.1}}">{{file.tag.0}}</p>
+					</div>
 				</div>
 			</div>
+			{% endfor %}
 		</div>
-		{% endfor %}
+	</div>
+</div>
+<div class="file-grid mt-6 hidden">
+	<div class="h-full overflow-y-hidden mt-0.5 tab relative">
+		<div class="w-full grid gap-3 table pb-2" style="grid-template-columns: repeat(auto-fill, minmax(200px, 1fr))">
+			{% for file in files %}
+			<div class="border-2 overflow-hidden rounded-lg bg-gray-100 transition-colors border-gray-200 font-medium text-lg file-row dropzone draggable-dropzone--occupied">
+				<div class="flex items-center transition-colors item" onclick="goto(this, {{ forloop.counter }})" data-type="{{ file.type }}" data-path="{% ifequal file.type "folder" %}{{file.name}}{% else %}{{file.path}}{% endifequal %}">
+					<div class="flex flex-col justify-center items-center w-full">
+						<div class="w-48 h-48 flex items-center justify-center preview">
+							<span class="iconify mt-4 flex-shrink-0 w-16 h-16 text-indigo-400" data-icon="{% ifequal file.type 'folder' %}bx:bxs-folder{% else %}{% if file.icon %}{{file.icon}}{% else %}bi:file-earmark-fill{% endif %}{% endifequal %}"></span>
+						</div>
+						<p class="w-full font-semibold text-xl flex items-center p-4 whitespace-nowrap">
+							<span class="iconify flex-shrink-0 w-7 h-7 mr-2 text-indigo-400" data-icon="{% ifequal file.type 'folder' %}bx:bxs-folder{% else %}{% if file.icon %}{{file.icon}}{% else %}bi:file-earmark-fill{% endif %}{% endifequal %}"></span>
+							<span class="overflow-ellipsis overflow-hidden" style="max-width: 20rem">{{file.name}}</span>
+						</p>
+					</div>
+				</div>
+			</div>
+			{% endfor %}
+		</div>
 	</div>
 </div>
 <div class="fixed right-6 bottom-6 add">
@@ -153,10 +176,10 @@
 	</button>
 </div>
 <div class="w-full img-viewer-cover h-screen bg-black bg-opacity-50 fixed top-0 left-0 transition-all opacity-0 hidden duration-500" onclick="closeImageViewer()"></div>
-<div class="img-viewer bg-white shadow-xl rounded-xl absolute flex flex-col top-1/2 left-1/2 p-8 transform -translate-x-1/2 translate-y-full transition-all duration-500 hidden" style="height: calc(100% - 8rem); width: calc(100% - 16rem)">
-	<div class="flex flex-grow-0 justify-between flex-shrink gap-8 items-center w-full h-full">
+<div class="img-viewer bg-white shadow-xl rounded-xl absolute flex flex-col gap-8 top-1/2 left-1/2 p-8 transform -translate-x-1/2 translate-y-full transition-all duration-500 hidden" style="height: calc(100% - 8rem); width: calc(100% - 16rem)">
+	<div class="flex flex-grow-0 justify-between flex-shrink gap-8 items-center w-full h-full min-h-0">
 		<button onclick="imgViewerLastImage()"><span class="iconify w-12 h-12 text-blue-500" data-icon="uil:angle-left"></span></button>
-		<div class="h-full flex-shrink flex items-center justify-center"><img class="image-container w-full" src="" /></div>
+		<img class="image-container h-full object-scale-down flex-shrink min-w-0" src="" />
 		<button onclick="imgViewerNextImage()"><span class="iconify w-12 h-12 text-blue-500" data-icon="uil:angle-right"></span></button>
 	</div>
 	<div class="flex-shrink-0">
