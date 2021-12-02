@@ -17,6 +17,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'imagefit',
 
     'api.apps.ApiConfig',
     'dashboard.apps.DashboardConfig',
@@ -99,7 +100,8 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 MESSAGE_STORAGE = 'django.contrib.messages.storage.cookie.CookieStorage'
 
-STORAGE_DIR = "/media/pi/SILLY CODER1"
+STORAGE_DIR = "/Users/melvinchia"
+IMAGEFIT_ROOT = STORAGE_DIR
 
 MEDIA_ROOT = STORAGE_DIR
 MEDIA_URL = '/files/'

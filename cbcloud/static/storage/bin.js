@@ -23,3 +23,13 @@ const removeFile = () => {
 		}
 	})
 }
+
+
+IMAGEFIT_CACHE_ENABLED = True
+IMAGEFIT_CACHE_BACKEND_NAME = 'imagefit'
+CACHES = {
+    'imagefit': {
+        'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+        'LOCATION': os.path.join(tempfile.gettempdir(), 'django_imagefit')
+    }
+}

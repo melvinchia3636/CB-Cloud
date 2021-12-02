@@ -1,5 +1,6 @@
 {% extends 'base/base.html' %}
 {% load operations %}
+{% load imagefit %}
 {% load static %}
 
 {% block breadcrumb %}{% endblock %}
@@ -72,8 +73,12 @@
 			<div class="border-2 overflow-hidden rounded-lg bg-gray-100 transition-colors border-gray-200 font-medium text-lg file-row dropzone draggable-dropzone--occupied">
 				<div class="flex items-center transition-colors item" onclick="goto(this, {{ forloop.counter }})" data-type="{{ file.type }}" data-path="{% ifequal file.type "folder" %}{{file.name}}{% else %}{{file.path}}{% endifequal %}">
 					<div class="flex flex-col justify-center items-center w-full">
-						<div class="w-48 h-48 flex items-center justify-center preview">
+						<div class="w-full h-48 flex items-center justify-center preview">
+							{% ifequal file.icon "bi:file-earmark-image-fill" %}
+							<img class="w-full h-48 object-cover object-top" src="{{ file.path|resize:'320x240,C' }}" />
+							{% else %}
 							<span class="iconify mt-4 flex-shrink-0 w-16 h-16 text-indigo-400" data-icon="{% ifequal file.type 'folder' %}bx:bxs-folder{% else %}{% if file.icon %}{{file.icon}}{% else %}bi:file-earmark-fill{% endif %}{% endifequal %}"></span>
+							{% endifequal %}
 						</div>
 						<p class="w-full font-semibold text-xl flex items-center p-4 whitespace-nowrap">
 							<span class="iconify flex-shrink-0 w-7 h-7 mr-2 text-indigo-400" data-icon="{% ifequal file.type 'folder' %}bx:bxs-folder{% else %}{% if file.icon %}{{file.icon}}{% else %}bi:file-earmark-fill{% endif %}{% endifequal %}"></span>

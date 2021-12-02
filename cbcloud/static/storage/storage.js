@@ -204,7 +204,7 @@ const download = async (url, filename) => {
 		.then(response => {
 			const contentEncoding = response.headers.get('content-encoding');
 			const contentLength = response.headers.get(contentEncoding ? 'x-file-size' : 'content-length');
-			contentType = response.headers.get('content-type');
+			const contentType = response.headers.get('content-type');
 			if (contentLength === null) {
 				throw Error('Response size header unavailable');
 			}
@@ -403,18 +403,6 @@ const imgViewerLastImage = () => {
 		inline: 'center'
 	});
 }
-
-$(".file-row").children().each((_, e) => {
-	const path = e.dataset.path.toLowerCase().split(".");
-	const extension = path[path.length - 1]
-
-	if (["jpg", "png"].includes(extension)) {
-		$(e).find(".preview")
-			.addClass("w-full bg-gray-200")
-			.find("span")
-			.replaceWith(`<img class="w-full h-48 object-cover object-top" src="${`${window.location.origin}/files/${path.join(".")}`.replace('#', "%23")}" />`)
-	}
-})
 
 const changeView = e => {
 	if (viewType === "list") {
