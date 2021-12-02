@@ -346,7 +346,7 @@ $(".cm-cover").contextmenu(e => {
 const openImageViewer = (path) => {
 	const allImages = $(".file-row").children().map((_, e) => e.dataset.path).get().filter(e => {
 		const path = e.split(".");
-		return ["jpg", "png"].includes(path[path.length - 1])
+		return ["jpg", "png"].includes(path[path.length - 1].toLowerCase())
 	})
 	$(".image-container").attr("src", `${window.location.origin}/files/${path}`.replace('#', "%23")).attr("data-index", allImages.indexOf(path))
 	$(".other-images").empty().append(allImages.map((e, i) => `<img data-index="${i}" class="h-16 ${e === path ? "current-image" : ""}" src="${`${window.location.origin}/files/${e}`.replace('#', "%23")}" />`).join(""))
