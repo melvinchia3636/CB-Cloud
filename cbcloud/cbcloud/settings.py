@@ -100,7 +100,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 MESSAGE_STORAGE = 'django.contrib.messages.storage.cookie.CookieStorage'
 
-STORAGE_DIR = "/Users/melvinchia"
+STORAGE_DIR = "/media/pi/SILLY CODER1"
 IMAGEFIT_ROOT = STORAGE_DIR
 
 MEDIA_ROOT = STORAGE_DIR
