@@ -375,7 +375,7 @@ const closeImageViewer = () => {
 const imgViewerNextImage = () => {
 	const allImages = $(".file-row").children().map((_, e) => e.dataset.path).get().filter(e => {
 		const path = e.split(".");
-		return ["jpg", "png"].includes(path[path.length - 1])
+		return ["jpg", "png"].includes(path[path.length - 1].toLowerCase())
 	})
 	let pathIndex = parseInt($(".image-container")[0].dataset.index, 10) + 1;
 	pathIndex = pathIndex >= allImages.length ? 0 : pathIndex
@@ -391,7 +391,7 @@ const imgViewerNextImage = () => {
 const imgViewerLastImage = () => {
 	const allImages = $(".file-row").children().map((_, e) => e.dataset.path).get().filter(e => {
 		const path = e.split(".");
-		return ["jpg", "png"].includes(path[path.length - 1])
+		return ["jpg", "png"].includes(path[path.length - 1].toLowerCase())
 	})
 	let pathIndex = parseInt($(".image-container")[0].dataset.index, 10) - 1;
 	pathIndex = pathIndex < 0 ? allImages.length - 1 : pathIndex
