@@ -6,7 +6,7 @@ let dragTo;
 let isDownloading;
 let viewType = localStorage.getItem("viewType") || "grid"
 
-$('button[onclick="changeView(this)"]').children().replaceWith(`<span class="iconify w-7 h-7 text-gray-700" data-icon="tabler:layout-${viewType}"></span>`)
+$('button[onclick="changeView(this)"]').children().replaceWith(`<span class="iconify w-7 h-7 text-zinc-700" data-icon="tabler:layout-${viewType}"></span>`)
 $(`.file-${viewType}`).removeClass("hidden")
 
 const arrow = `<svg class="mt-0.5" width="10" height="10" viewBox="0 0 9 9" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -417,5 +417,5 @@ const changeView = e => {
 		$(".file-list").fadeIn(200)
 	}
 	localStorage.setItem("viewType", viewType)
-	$(e).children().replaceWith(`<span class="iconify w-7 h-7 text-gray-700" data-icon="tabler:layout-${viewType}"></span>`)
+	$(e).children().replaceWith(`<span class="iconify w-7 h-7 text-zinc-700" data-icon="tabler:layout-${viewType}"></span>`)
 }

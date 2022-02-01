@@ -24,21 +24,21 @@
 	</div>
 	<div class="flex gap-8">
 		<div class="gap-8 hidden" id="func-tools">
-			<button><span class="iconify w-7 h-7 text-gray-700" data-icon="uil:link-h"></span></button>
-			<button><span class="iconify w-7 h-7 text-gray-700" data-icon="uil:unlock-alt"></span></button>
-			<button onclick="downloadFile()"><span class="iconify w-7 h-7 text-gray-700" data-icon="uil:cloud-download"></span></button>
-			<button onclick="removeFile()"><span class="iconify w-7 h-7 text-gray-700" data-icon="uil:trash-alt"></span></button>
-			<button onclick="addTagPromptShow()"><span class="iconify w-7 h-7 text-gray-700" data-icon="uil:tag-alt"></span></button>
+			<button><span class="iconify w-7 h-7 text-zinc-700" data-icon="uil:link-h"></span></button>
+			<button><span class="iconify w-7 h-7 text-zinc-700" data-icon="uil:unlock-alt"></span></button>
+			<button onclick="downloadFile()"><span class="iconify w-7 h-7 text-zinc-700" data-icon="uil:cloud-download"></span></button>
+			<button onclick="removeFile()"><span class="iconify w-7 h-7 text-zinc-700" data-icon="uil:trash-alt"></span></button>
+			<button onclick="addTagPromptShow()"><span class="iconify w-7 h-7 text-zinc-700" data-icon="uil:tag-alt"></span></button>
 		</div>
 		<div class="divider-v bg-gray-300 hidden"></div>
 		<div class="flex gap-8">
-			<button onclick="changeView(this)"><span class="iconify w-7 h-7 text-gray-700" data-icon="tabler:layout-grid"></span></button>
-			<button><span class="iconify w-7 h-7 text-gray-700" data-icon="uil:info-circle"></span></button>
+			<button onclick="changeView(this)"><span class="iconify w-7 h-7 text-zinc-700" data-icon="tabler:layout-grid"></span></button>
+			<button><span class="iconify w-7 h-7 text-zinc-700" data-icon="uil:info-circle"></span></button>
 		</div>
 	</div>
 </div>
 <div class="file-list hidden">
-	<div class="text-left text-gray-500 font-semibold border-b-2 border-gray-200 mt-6 flex w-full">
+	<div class="text-left text-zinc-500 font-semibold border-b-2 border-gray-200 mt-6 flex w-full">
 		<p class="w-5/12 pb-2">Name</p>
 		<p class="w-2/12">Last Modified</p>
 		<p class="w-2/12">Date Created</p>
@@ -95,7 +95,7 @@
 	<button class="transition-all rounded-full w-16 h-16 shadow-md flex items-center justify-center bg-indigo-400" style="z-index: 9999">
 		<span class="iconify w-7 h-7 text-white" data-icon="uil:plus" style="stroke: white; stroke-width: .6px"></span>
 	</button>
-	<div class="w-96 h-0 absolute bottom-0 right-0 text-gray-500 bg-white rounded-xl shadow-md overflow-hidden">
+	<div class="w-96 h-0 absolute bottom-0 right-0 text-zinc-500 bg-white rounded-xl shadow-md overflow-hidden">
 		<button class="w-full px-8 py-3 pt-3 flex items-center mb-3 gap-4 font-bold text-xl" onclick="newFolderPromptShow()">
 			<span class="iconify w-8 h-8" data-icon="uil:folder-plus"></span>
 			Create folder
@@ -113,9 +113,9 @@
 			New Folder
 		</div>
 		<form>
-			<input type="text" class="text-gray-700 border-2 rounded-md border-gray-400 px-4 py-3 w-96 my-6 text-xl font-medium" placeholder="Untitled Folder"/>
+			<input type="text" class="text-zinc-700 border-2 rounded-md border-gray-400 px-4 py-3 w-96 my-6 text-xl font-medium" placeholder="Untitled Folder"/>
 			<div class="flex gap-2 justify-end w-full">
-				<a class="font-semibold text-lg text-gray-500 px-5 py-2 rounded-md" onclick="newFolderPromptHide()">
+				<a class="font-semibold text-lg text-zinc-500 px-5 py-2 rounded-md" onclick="newFolderPromptHide()">
 					Cancel
 				</a>
 				<input type="submit" class="bg-indigo-400 font-semibold text-lg text-white px-6 py-2 rounded-md" value="Create">
@@ -149,11 +149,11 @@
 		</div>
 		<form>
 			<div class="border-2 rounded-md border-gray-400 flex items-center gap-4 my-6 overflow-hidden">
-				<input type="text" class="text-gray-700 px-4 py-3 w-96 text-xl font-medium" placeholder="Tag name"/>
+				<input type="text" class="text-zinc-700 px-4 py-3 w-96 text-xl font-medium" placeholder="Tag name"/>
 				<div id="color-pick" class="w-9 h-9 rounded-full mr-2 shadow-md cursor-pointer"></div>
 			</div>
 			<div class="flex gap-2 justify-end w-full">
-				<a class="font-semibold text-lg text-gray-500 px-5 py-2 rounded-md" onclick="addTagPromptHide()">
+				<a class="font-semibold text-lg text-zinc-500 px-5 py-2 rounded-md" onclick="addTagPromptHide()">
 					Cancel
 				</a>
 				<input type="submit" class="bg-indigo-400 font-semibold text-lg text-white px-6 py-2 rounded-md" value="Create">
@@ -163,16 +163,16 @@
 </div>
 <div class="absolute w-screen h-screen top-0 left-0 hidden cm-cover"></div>
 <div class="fixed h-0 flex flex-col overflow-hidden contextmenu bg-white shadow-md rounded-md p-0 transition-all">
-	<button class="flex gap-4 items-center text-gray-700 font-medium text-lg transition-all bg-white hover:bg-gray-50 px-4 py-3 pt-4">
-		<span class="iconify w-6 h-6 text-gray-700" data-icon="uil:cloud-download"></span>
+	<button class="flex gap-4 items-center text-zinc-700 font-medium text-lg transition-all bg-white hover:bg-gray-50 px-4 py-3 pt-4">
+		<span class="iconify w-6 h-6 text-zinc-700" data-icon="uil:cloud-download"></span>
 		Download file
 	</button>
-	<button class="flex gap-4 items-center text-gray-700 font-medium text-lg transition-all bg-white hover:bg-gray-50 px-4 py-3">
-		<span class="iconify w-6 h-6 text-gray-700" data-icon="uil:tag-alt"></span>
+	<button class="flex gap-4 items-center text-zinc-700 font-medium text-lg transition-all bg-white hover:bg-gray-50 px-4 py-3">
+		<span class="iconify w-6 h-6 text-zinc-700" data-icon="uil:tag-alt"></span>
 		Add Tag
 	</button>
-	<button class="flex gap-4 items-center text-gray-700 font-medium text-lg transition-all bg-white hover:bg-gray-50 px-4 py-3">
-		<span class="iconify w-6 h-6 text-gray-700" data-icon="uil:unlock-alt"></span>
+	<button class="flex gap-4 items-center text-zinc-700 font-medium text-lg transition-all bg-white hover:bg-gray-50 px-4 py-3">
+		<span class="iconify w-6 h-6 text-zinc-700" data-icon="uil:unlock-alt"></span>
 		Lock document
 	</button>
 	<button class="flex gap-4 items-center text-red-400 font-medium text-lg transition-all bg-white hover:bg-gray-50 px-4 py-3 pb-4">

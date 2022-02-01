@@ -33,8 +33,8 @@ let isErroring = false;
 let isErroring2 = false;
 
 $("#collection-create input").on('input', e => {
-	if ($("#collection-create input").first().val().trim()) $("#collection-create input").last().prop('disabled', false).addClass('bg-indigo-400 text-white').removeClass('bg-gray-300 text-gray-400')
-	else $("#collection-create input").last().prop('disabled', true).removeClass('bg-indigo-400 text-white').addClass('bg-gray-300 text-gray-400')
+	if ($("#collection-create input").first().val().trim()) $("#collection-create input").last().prop('disabled', false).addClass('bg-indigo-400 text-white').removeClass('bg-gray-300 text-zinc-400')
+	else $("#collection-create input").last().prop('disabled', true).removeClass('bg-indigo-400 text-white').addClass('bg-gray-300 text-zinc-400')
 
 	if (isErroring) {
 		$("#collection-create input").first().next().remove()
@@ -247,7 +247,7 @@ function makeid() {
 const generateAutoID = e => {
 	$(e).parent().children("input[type='text']").val(makeid());
 	$(e).text('');
-	$("#document-create input").last().prop('disabled', false).addClass('bg-indigo-400 text-white').removeClass('bg-gray-300 text-gray-400')
+	$("#document-create input").last().prop('disabled', false).addClass('bg-indigo-400 text-white').removeClass('bg-gray-300 text-zinc-400')
 	$('.entry > input[type="text"]').focus()
 }
 
@@ -259,8 +259,8 @@ $('.entry > input[type="text"]').on("input", e => {
 
 $("#document-create input").first().on('input', e => {
 	const entryBox = $("#document-create input");
-	if (entryBox.first().val().trim()) entryBox.last().prop('disabled', false).addClass('bg-indigo-400 text-white').removeClass('bg-gray-300 text-gray-400')
-	else entryBox.last().prop('disabled', true).removeClass('bg-indigo-400 text-white').addClass('bg-gray-300 text-gray-400')
+	if (entryBox.first().val().trim()) entryBox.last().prop('disabled', false).addClass('bg-indigo-400 text-white').removeClass('bg-gray-300 text-zinc-400')
+	else entryBox.last().prop('disabled', true).removeClass('bg-indigo-400 text-white').addClass('bg-gray-300 text-zinc-400')
 
 	if (isErroring2) {
 		entryBox.first().parent().next().remove()
@@ -618,7 +618,7 @@ const generateDocContentDOM = res => {
 			case 0: case 1:
 				item.append(`
 				<div class="bg-white w-full py-1 px-5 font-semibold text-lg flex items-center item transition-all cursor-pointer gap-4">
-						<span class="text-gray-500">${key}:</span> <span class="text-xl">${value}</span>
+						<span class="text-zinc-500">${key}:</span> <span class="text-xl">${value}</span>
 					</div>
 				`);
 				break;
@@ -626,7 +626,7 @@ const generateDocContentDOM = res => {
 				case 2:
 					item.append(`
 					<div class="bg-white w-full py-1 px-5 font-semibold text-lg flex items-center item transition-all cursor-pointer gap-4">
-							<span class="text-gray-500">${key}:</span> <span class="${value ? "text-green-500" : "text-red-500"} text-xl">${value}</span>
+							<span class="text-zinc-500">${key}:</span> <span class="${value ? "text-green-500" : "text-red-500"} text-xl">${value}</span>
 						</div>
 					`);
 					break;
@@ -634,7 +634,7 @@ const generateDocContentDOM = res => {
 				case 3:
 					item.append(`
 					<div class="bg-white w-full py-1 px-5 font-semibold text-lg flex items-center item transition-all cursor-pointer gap-4">
-							<span class="text-gray-500">${key}:</span> <span class="text-red-800 text-xl">${value}</span>
+							<span class="text-zinc-500">${key}:</span> <span class="text-red-800 text-xl">${value}</span>
 						</div>
 					`);
 					break;
@@ -642,7 +642,7 @@ const generateDocContentDOM = res => {
 				case 6:
 					item.append(`
 					<div class="bg-white w-full py-1 px-5 font-semibold text-lg flex items-center item transition-all cursor-pointer gap-4">
-							<span class="text-gray-500">${key}:</span> <span class="text-xl">[${value.map((e, i) => convertDEGToDMS(e, i)).join(", ")}]</span>
+							<span class="text-zinc-500">${key}:</span> <span class="text-xl">[${value.map((e, i) => convertDEGToDMS(e, i)).join(", ")}]</span>
 						</div>
 					`);
 					break;

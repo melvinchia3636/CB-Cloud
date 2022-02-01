@@ -3,6 +3,9 @@ from django.views.decorators.csrf import ensure_csrf_cookie
 from django.shortcuts import render
 from django.http import Http404
 from django.conf import settings
+from rest_framework.response import Response
+from rest_framework.decorators import api_view, renderer_classes
+from rest_framework.renderers import JSONRenderer
 import psutil
 import os
 import time
@@ -35,6 +38,12 @@ def requestFiles(path):
 	})
 
 	return sorted(files, key=lambda i: ['folder', 'file'].index(i["type"]))
+
+@api_view(('GET',))
+@renderer_classes((JSONRenderer,))
+def APIFetchFileWithPathView(request, path):
+	files = requestFiles(path)
+	return Response(files)
 
 @ensure_csrf_cookie
 def HomeView(request):

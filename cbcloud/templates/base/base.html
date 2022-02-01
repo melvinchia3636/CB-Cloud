@@ -14,10 +14,10 @@
 	<script src="https://cdn.jsdelivr.net/npm/perfect-scrollbar@1.5.2/dist/perfect-scrollbar.min.js"></script>
 	<title>Codeblog Cloud</title>
 </head>
-<body class="bg-gray-100 flex text-gray-700">
+<body class="bg-gray-100 flex text-zinc-700">
 	<div class="h-screen bg-white w-72 shadow-lg flex flex-shrink-0 flex-col justify-between sticky top-0 left-0">
 		<img src="{% static 'base/logo.svg' %}" class="p-8 w-10/12">
-		<ul class="text-gray-500 gap-6 flex flex-col nav">
+		<ul class="text-zinc-500 gap-6 flex flex-col nav">
 			<a href="{% url 'dashboard' %}" class="w-full px-8 py-4 flex items-center gap-4 font-bold text-xl {% ifequal curtab 0 %}text-indigo-400 active{% endifequal %}">
 				<span class="iconify w-8 h-8" data-icon="uil:create-dashboard"></span>
 				Dashboard
@@ -54,8 +54,8 @@
 		<div class="flex w-full justify-between">
 			<h2 class="text-4xl font-normal">Hello <span class="font-bold">Melvin Chia</span>,</h2>
 			<div class="flex gap-10">
-				<button><span class="iconify w-6 h-6 text-gray-900" data-icon="uil:search"></span></button>
-				<button><span class="iconify w-6 h-6 text-gray-900" data-icon="uil:sliders-v"></span></button>
+				<button><span class="iconify w-6 h-6 text-zinc-700" data-icon="uil:search"></span></button>
+				<button><span class="iconify w-6 h-6 text-zinc-700" data-icon="uil:sliders-v"></span></button>
 				<div class="w-12 h-12 rounded-full overflow-hidden shadow-md"><img src="https://picsum.photos/id/1033/300"></div>
 			</div>
 		</div>

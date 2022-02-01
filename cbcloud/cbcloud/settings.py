@@ -17,6 +17,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
+    "corsheaders",
     'imagefit',
 
     'api.apps.ApiConfig',
@@ -29,6 +31,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    "corsheaders.middleware.CorsMiddleware",
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -100,11 +103,13 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 MESSAGE_STORAGE = 'django.contrib.messages.storage.cookie.CookieStorage'
 
-STORAGE_DIR = "/Users/melvinchia"
+STORAGE_DIR = "/Users/melvinchia/Desktop"
 IMAGEFIT_ROOT = STORAGE_DIR
 
 MEDIA_ROOT = STORAGE_DIR
 MEDIA_URL = '/files/'
+
+CORS_ALLOW_ALL_ORIGINS = True
 
 if not os.path.exists(os.path.join(MEDIA_ROOT, '.bin')):
     os.mkdir(os.path.join(MEDIA_ROOT, ".bin"))

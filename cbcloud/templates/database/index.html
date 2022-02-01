@@ -9,13 +9,13 @@
 		Databases
 	</div>
 	<div class="flex gap-8">
-			<button><span class="iconify w-7 h-7 text-gray-700" data-icon="uil:link-h"></span></button>
-			<button><span class="iconify w-7 h-7 text-gray-700" data-icon="uil:unlock-alt"></span></button>
-			<button onclick="downloadFile()"><span class="iconify w-7 h-7 text-gray-700" data-icon="uil:cloud-download"></span></button>
-			<button onclick="removeFile()"><span class="iconify w-7 h-7 text-gray-700" data-icon="uil:trash-alt"></span></button>
-			<button onclick="addTagPromptShow()"><span class="iconify w-7 h-7 text-gray-700" data-icon="uil:tag-alt"></span></button>
-			<button><span class="iconify w-7 h-7 text-gray-700" data-icon="tabler:layout-grid"></span></button>
-			<button><span class="iconify w-7 h-7 text-gray-700" data-icon="uil:info-circle"></span></button>
+			<button><span class="iconify w-7 h-7 text-zinc-700" data-icon="uil:link-h"></span></button>
+			<button><span class="iconify w-7 h-7 text-zinc-700" data-icon="uil:unlock-alt"></span></button>
+			<button onclick="downloadFile()"><span class="iconify w-7 h-7 text-zinc-700" data-icon="uil:cloud-download"></span></button>
+			<button onclick="removeFile()"><span class="iconify w-7 h-7 text-zinc-700" data-icon="uil:trash-alt"></span></button>
+			<button onclick="addTagPromptShow()"><span class="iconify w-7 h-7 text-zinc-700" data-icon="uil:tag-alt"></span></button>
+			<button><span class="iconify w-7 h-7 text-zinc-700" data-icon="tabler:layout-grid"></span></button>
+			<button><span class="iconify w-7 h-7 text-zinc-700" data-icon="uil:info-circle"></span></button>
 		</div>
 	</div>
 	<div class="my-12 tab relative flex gap-3">
@@ -73,12 +73,12 @@
 			Start a Collection
 		</div>
 		<form>
-			<input type="text" class="text-gray-700 border-2 rounded-md border-gray-400 px-4 py-3 w-96 my-6 text-xl font-medium" placeholder="Collection ID"/>
+			<input type="text" class="text-zinc-700 border-2 rounded-md border-gray-400 px-4 py-3 w-96 my-6 text-xl font-medium" placeholder="Collection ID"/>
 			<div class="flex gap-2 justify-end w-full">
-				<a class="font-semibold text-lg text-gray-500 px-5 py-2 rounded-md" onclick="newCollectionPromptHide()">
+				<a class="font-semibold text-lg text-zinc-500 px-5 py-2 rounded-md" onclick="newCollectionPromptHide()">
 					Cancel
 				</a>
-				<input type="submit" class="bg-gray-300 font-semibold text-lg text-gray-400 px-6 py-2 rounded-md transition-all" disabled value="Create">
+				<input type="submit" class="bg-gray-300 font-semibold text-lg text-zinc-400 px-6 py-2 rounded-md transition-all" disabled value="Create">
 			</div>
 		</form>
 	</div>
@@ -92,24 +92,24 @@
 		<form>
 			<div class="mt-6">
 				<div class="border-2 rounded-md border-gray-400 w-96 entry overflow-hidden flex items-center pr-3">
-					<input type="text" class="text-gray-700 rounded-md w-full px-4 py-3 text-xl font-medium" placeholder="Document ID"/>
+					<input type="text" class="text-zinc-700 rounded-md w-full px-4 py-3 text-xl font-medium" placeholder="Document ID"/>
 					<a class="text-indigo-400 font-semibold w-16 whitespace-nowrap mt-0.5" onclick="generateAutoID(this)">Auto-ID</a>
 				</div>
 			</div>
 			<div class="w-full ml-4 mb-6 pt-4 fields relative flex flex-col gap-4">
 				<div class="field items-center gap-4 relative pl-4 ml-1 last">
 					<div class="flex field-name relative">
-						<a class="rounded-full ml-1 text-gray-400" onclick="appendField(this)">
+						<a class="rounded-full ml-1 text-zinc-400" onclick="appendField(this)">
 							<span class="iconify w-6 h-6 mr-3 bg-white" data-icon="uil:plus-circle"></span>
 						</a>
 					</div>
 				</div>
 			</div>
 			<div class="flex gap-2 justify-end w-full">
-				<a class="font-semibold text-lg text-gray-500 px-5 py-2 rounded-md" onclick="newDocumentPromptHide()">
+				<a class="font-semibold text-lg text-zinc-500 px-5 py-2 rounded-md" onclick="newDocumentPromptHide()">
 					Cancel
 				</a>
-				<input type="submit" class="bg-gray-300 font-semibold text-lg text-gray-400 px-6 py-2 rounded-md transition-all" disabled value="Save">
+				<input type="submit" class="bg-gray-300 font-semibold text-lg text-zinc-400 px-6 py-2 rounded-md transition-all" disabled value="Save">
 			</div>
 		</form>
 	</div>
@@ -121,15 +121,15 @@
 			Pick a Date
 		</div>
 		<div class="flex justify-between my-6 items-center">
-			<a class="rounded-full text-gray-400" onclick="gotoMonth(0)">
+			<a class="rounded-full text-zinc-400" onclick="gotoMonth(0)">
 				<span class="iconify w-6 h-6 bg-white" data-icon="uil:angle-left"></span>
 			</a>
 			<div class="font-semibold text-xl ym"></div>
-			<a class="rounded-full text-gray-400" onclick="gotoMonth(1)">
+			<a class="rounded-full text-zinc-400" onclick="gotoMonth(1)">
 				<span class="iconify w-6 h-6 bg-white" data-icon="uil:angle-right"></span>
 			</a>
 		</div>
-		<div class="flex justify-center gap-8 mb-6 font-semibold text-gray-400">
+		<div class="flex justify-center gap-8 mb-6 font-semibold text-zinc-400">
 			<p class="w-6 flex justify-center items-center">S</p>
 			<p class="w-6 flex justify-center items-center">M</p>
 			<p class="w-6 flex justify-center items-center">T</p>
@@ -141,7 +141,7 @@
 		<div class="calendar">
 		</div>
 		<div class="flex gap-2 justify-end w-full">
-			<a class="font-semibold text-lg text-gray-500 px-5 py-2 rounded-md" onclick="datePickerHide()">
+			<a class="font-semibold text-lg text-zinc-500 px-5 py-2 rounded-md" onclick="datePickerHide()">
 				Cancel
 			</a>
 			<input type="submit" class="bg-indigo-400 text-white font-semibold text-lg px-6 py-2 rounded-md transition-all" value="Pick" onclick="pickDate()">
@@ -152,11 +152,11 @@
 	<div class="field pl-4 ml-1">
 		<div class="flex items-start gap-4 bg-white relative">
 			<div class="flex gap-4 items-center field-name">
-				<div class="relative"><input type="text" class="text-gray-700 relative border-2 rounded-md border-gray-400 px-4 py-3 w-48 text-xl font-medium" placeholder="Field"/></div>
+				<div class="relative"><input type="text" class="text-zinc-700 relative border-2 rounded-md border-gray-400 px-4 py-3 w-48 text-xl font-medium" placeholder="Field"/></div>
 				<p class="text-xl font-semibold"> = </p>
 			</div>
 			<div class="flex items-start gap-2">
-				<select class="text-gray-700 px-4 py-3 w-48 text-xl font-medium">
+				<select class="text-zinc-700 px-4 py-3 w-48 text-xl font-medium">
 					<option value="0" default>string</option>
 					<option value="1">number</option>
 					<option value="2">boolean</option>
@@ -168,13 +168,13 @@
 				</select>
 				<div>
 					<div class="flex items-center gap-4">
-						<input type="text" class="text-gray-700 border-2 rounded-md border-gray-400 px-4 py-3 w-48 text-xl font-medium val" placeholder="Value"/>
-						<select class="text-gray-700 px-4 py-3 w-48 text-xl font-medium bool hidden">
+						<input type="text" class="text-zinc-700 border-2 rounded-md border-gray-400 px-4 py-3 w-48 text-xl font-medium val" placeholder="Value"/>
+						<select class="text-zinc-700 px-4 py-3 w-48 text-xl font-medium bool hidden">
 							<option value="0" default>false</option>
 							<option value="1">true</option>
 						</select>
 						<div class="flex items-center gap-4 bg-white relative" onclick="removeField(this)">
-							<a class="rounded-full ml-1 text-gray-400">
+							<a class="rounded-full ml-1 text-zinc-400">
 								<span class="iconify w-6 h-6 mr-3" data-icon="uil:minus-circle"></span>
 							</a>
 						</div>
@@ -185,12 +185,12 @@
 		<div class="w-full ml-4 fields sub-fields relative flex flex-col gap-4 pt-4 hidden geo">
 			<div class="flex field sub-field items-start gap-4 relative pl-1 ml-4">
 				<div class="flex items-start gap-2 field-name relative">
-					<input type="text" class="text-gray-700 relative border-2 rounded-md border-gray-400 px-4 py-3 w-48 text-xl font-medium sub-val lat" placeholder="Latitude"/>
+					<input type="text" class="text-zinc-700 relative border-2 rounded-md border-gray-400 px-4 py-3 w-48 text-xl font-medium sub-val lat" placeholder="Latitude"/>
 				</div>
 			</div>
 			<div class="flex field sub-field items-start gap-4 relative pl-1 ml-4">
 				<div class="flex items-start gap-2 field-name relative">
-					<input type="text" class="text-gray-700 relative border-2 rounded-md border-gray-400 px-4 py-3 w-48 text-xl font-medium sub-val lon" placeholder="Longitude"/>
+					<input type="text" class="text-zinc-700 relative border-2 rounded-md border-gray-400 px-4 py-3 w-48 text-xl font-medium sub-val lon" placeholder="Longitude"/>
 				</div>
 			</div>
 		</div>
@@ -198,8 +198,8 @@
 			<div class="flex field sub-field gap-4 relative pl-1 ml-4">
 				<div class="flex items-center gap-2 field-name relative">
 					<div class="flex items-center bg-white border-2 rounded-md border-gray-400 px-4 py-3 relative">
-						<input type="text" class="text-gray-700 relative text-xl font-medium sub-val date" placeholder="MM/DD/YYYY"/>
-						<a class="rounded-full ml-1 text-gray-400" onclick="datePickerShow(this)">
+						<input type="text" class="text-zinc-700 relative text-xl font-medium sub-val date" placeholder="MM/DD/YYYY"/>
+						<a class="rounded-full ml-1 text-zinc-400" onclick="datePickerShow(this)">
 							<span class="iconify w-6 h-6" data-icon="uil:calendar-alt"></span>
 						</a>
 					</div>
@@ -207,7 +207,7 @@
 			</div>
 			<div class="flex field sub-field items-start gap-4 relative pl-1 ml-4">
 				<div class="flex items-start gap-2 field-name relative">
-					<input type="text" class="text-gray-700 relative border-2 rounded-md border-gray-400 px-4 py-3 w-48 text-xl font-medium sub-val time" placeholder="00:00:00000"/>
+					<input type="text" class="text-zinc-700 relative border-2 rounded-md border-gray-400 px-4 py-3 w-48 text-xl font-medium sub-val time" placeholder="00:00:00000"/>
 				</div>
 			</div>
 		</div>
@@ -217,7 +217,7 @@
 	<div class="w-full ml-4 mb-6 pt-4 fields map relative flex flex-col gap-4">
 		<div class="field items-center gap-4 relative pl-4 ml-1 last">
 			<div class="flex field-name relative">
-				<a class="rounded-full ml-1 text-gray-400" onclick="appendField(this)">
+				<a class="rounded-full ml-1 text-zinc-400" onclick="appendField(this)">
 					<span class="iconify w-6 h-6 mr-3 bg-white" data-icon="uil:plus-circle"></span>
 				</a>
 			</div>
@@ -228,7 +228,7 @@
 	<div class="w-full ml-4 mb-6 pt-4 fields array relative flex flex-col gap-4">
 		<div class="field items-center gap-4 relative pl-4 ml-1 last">
 			<div class="flex field-name relative">
-				<a class="rounded-full ml-1 text-gray-400" onclick="appendArrayField(this)">
+				<a class="rounded-full ml-1 text-zinc-400" onclick="appendArrayField(this)">
 					<span class="iconify w-6 h-6 mr-3 bg-white" data-icon="uil:plus-circle"></span>
 				</a>
 			</div>
