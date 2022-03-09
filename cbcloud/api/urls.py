@@ -9,11 +9,4 @@ urlpatterns = [
 	path('remove-file', views.RemoveFiles, name="api-remove-files"),
 	path('permanent-remove', views.PermanentRemove, name="api-permanent-remove"),
 	path('add-tag', views.TagAdd, name="api-add-tag"),
-
-	#database
-	path('create-collection', views.CreateCollection, name="api-create-collection"),
-	path('fetch-collections', views.FetchCollection, name="api-fetch-collections"),
-	path('create-document', views.CreateDocument, name="api-create-document"),
-	path('fetch-document', views.FetchDocument, name="api-fetch-document"),
-	path('fetch-doc-content', views.fetchDocContent, name="api-fetch-doc-content")
 ]

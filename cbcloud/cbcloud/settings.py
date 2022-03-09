@@ -24,7 +24,6 @@ INSTALLED_APPS = [
     'api.apps.ApiConfig',
     'dashboard.apps.DashboardConfig',
     'storage.apps.StorageConfig',
-    'database.apps.DatabaseConfig',
     'bin.apps.BinConfig'
 ]
 

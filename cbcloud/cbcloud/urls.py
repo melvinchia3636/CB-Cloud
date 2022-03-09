@@ -11,7 +11,6 @@ urlpatterns = [
     path('dashboard/', include('dashboard.urls')),
     path('storage/bin', include('bin.urls')),
     path('storage/', include('storage.urls')),
-    path('database/', include('database.urls')),
     path('api/', include('api.urls')),
     url(r'^static/(?P<path>.*)$', serve, {'document_root': settings.STATIC_ROOT}),
     url(r'^media/(?P<path>.*)$', serve,{'document_root': settings.MEDIA_ROOT}),
